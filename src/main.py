@@ -2,6 +2,21 @@ import subprocess
 import sys
 
 
+def run_shell_command(command: str, cwd: str = None):
+    p = subprocess.run(
+        command.split(" "),
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        cwd=cwd,
+    )
+    assert p.returncode == 0, (
+        f"command '{command}' failed with exit code "
+        + f"{p.returncode}: stderr = '{p.stderr}'"
+    )
+    return p
+
+
 def run():
     print(
         "Please DO NOT use a virtual environment for PYRA! Use the"
@@ -23,3 +38,14 @@ def run():
 
     # now we can assume that the system interpreter is used
     # and has a Python version 3.10.x
+
+    try:
+        run_shell_command("which poetry")
+    except AssertionError as e:
+        print(e)
+        print(
+            "Please make sure to have poetry installed. See "
+            + "https://python-poetry.org/\naborting"
+        )
+
+    # now, all required system software can be assumed to be present
