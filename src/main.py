@@ -27,15 +27,23 @@ def get_documents_directory():
         raise Exception(f"Unknown platform '{sys.platform}'")
 
 
+def get_local_pyra_versions(pyra_directory: str):
+    return [
+        d
+        for d in os.listdir(pyra_directory)
+        if (d.startswith("pyra-") and os.path.isdir(os.path.join(pyra_directory, d)))
+    ]
+
+
 def run():
     print(
         "Please DO NOT use a virtual environment for PYRA! Use the"
-        + " system interpreter available via the command 'python'.\n\n"
+        + " system interpreter available via the command 'python'. "
         + f"Currently using the interpreter '{sys.executable}'"
     )
     if not input(
-        f"\nOpen a new shell, run 'which python'. Is the system-"
-        + "interpreter the same as the current interpreter? (Y/n) "
+        f"TODO: Run 'which python' in another shell. Do system-"
+        + "interpreter and the current one match? (Y/n) "
     ).startswith("Y"):
         print("aborting")
         return
@@ -68,3 +76,9 @@ def run():
     if not os.path.isdir(pyra_directory):
         os.mkdir(pyra_directory)
         print(f"Created directory '{pyra_directory}'")
+
+    local_pyra_versions = get_local_pyra_versions(pyra_directory)
+    print(
+        f"Local PYRA versions: {', '.join(local_pyra_versions)}"
+        + f"{'none' if len(local_pyra_versions) == 0 else ''}"
+    )
