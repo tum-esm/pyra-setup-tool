@@ -33,7 +33,6 @@ def run():
         + " system interpreter available via the command 'python'.\n\n"
         + f"Currently using the interpreter '{sys.executable}'"
     )
-
     if not input(
         f"\nOpen a new shell, run 'which python'. Is the system-"
         + "interpreter the same as the current interpreter? (Y/n) "
@@ -52,12 +51,20 @@ def run():
     try:
         run_shell_command("which poetry")
     except AssertionError as e:
-        print(e)
         print(
             "Please make sure to have poetry installed. See "
             + "https://python-poetry.org/\naborting"
         )
+        raise e
 
     # now, all required system software can be assumed to be present
 
     documents_directory = get_documents_directory()
+    assert os.path.isdir(
+        documents_directory
+    ), f"Documents directory does not exist. ({documents_directory})"
+
+    pyra_directory = os.path.join(documents_directory, "pyra")
+    if not os.path.isdir(pyra_directory):
+        os.mkdir(pyra_directory)
+        print(f"Created directory '{pyra_directory}'")
