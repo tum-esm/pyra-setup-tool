@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 
@@ -15,6 +16,15 @@ def run_shell_command(command: str, cwd: str = None):
         + f"{p.returncode}: stderr = '{p.stderr}'"
     )
     return p
+
+
+def get_documents_directory():
+    if sys.platform in ["darwin", "linux"]:
+        return os.environ["HOME"] + "/Documents"
+    elif sys.platform in ["win32", "cygwin"]:
+        return os.environ["USERPROFILE"] + "\\Documents"
+    else:
+        raise Exception(f"Unknown platform '{sys.platform}'")
 
 
 def run():
@@ -49,3 +59,5 @@ def run():
         )
 
     # now, all required system software can be assumed to be present
+
+    documents_directory = get_documents_directory()
