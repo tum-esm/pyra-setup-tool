@@ -1,53 +1,9 @@
-import json
 import os
 import subprocess
 import sys
-from typing import TypedDict
-import requests
-
-
-class ReleaseDict(TypedDict):
-    tag_name: str
-    code_tarball_url: str
-    ui_installer_url: str
-
-
-def fetch_available_release_tags() -> list[ReleaseDict]:
-    response = requests.get("https://api.github.com/repos/tum-esm/pyra/releases")
-    assert (
-        response.status_code == 200
-    ), f"API did not respond as expected: {response.text}"
-    release_list = json.loads(response.text)
-    results_list: list[ReleaseDict] = []
-    if isinstance(release_list, list):
-        for r in release_list:
-            try:
-                # release should have a msi file (microsoft installer file)
-                assert len(r["assets"]) == 1
-                assert r["tag_name"] >= "v4.0.4"
-                assert r["assets"][0]["name"].endswith(".msi")
-                results_list.append(
-                    {
-                        "tag_name": r["tag_name"],
-                        "code_tarball_url": r["tarball_url"],
-                        "ui_installer_url": r["assets"][0]["browser_download_url"],
-                    }
-                )
-            except:
-                pass
-    return results_list
-
-
-def pprint(text: str, color: str | None = None, end: str = "\n"):
-    color_sequences = {"red": "\033[91m", "green": "\033[92m", "yellow": "\033[93m"}
-    if color is not None:
-        assert color in color_sequences.keys(), f"Unknown color '{color}'"
-        text = f"{color_sequences[color]}{text}\033[00m"
-    print(text, end=end)
-
-
-def print_line():
-    print("-" * os.get_terminal_size().columns)
+from .utils.fetch_release_tags import fetch_release_tags
+from .utils.printing_utils import print_line, pretty_print
+from .utils import types
 
 
 def run_shell_command(command: str, cwd: str = None):
@@ -85,26 +41,26 @@ def get_local_pyra_versions(pyra_directory: str):
 def run():
     try:
         print_line()
-        pprint("Welcome to the pyra-setup-tool! Instruction formatting: ")
-        pprint("  * checkpoints are green ", color="green")
-        pprint("  * todos are yellow ", color="yellow")
-        pprint("  * errors are red ", color="red")
-        pprint("  * information is uncolored ")
+        pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")
+        pretty_print("  * checkpoints are green ", color="green")
+        pretty_print("  * todos are yellow ", color="yellow")
+        pretty_print("  * errors are red ", color="red")
+        pretty_print("  * information is uncolored ")
         print_line()
 
-        pprint(
+        pretty_print(
             "Please DO NOT use a virtual environment for PYRA! Use the"
             + " system interpreter available via the command 'python'. "
             + f"Currently using the interpreter '{sys.executable}'"
         )
-        pprint(
+        pretty_print(
             f"Run 'which python' in another shell. Are system-"
             + "interpreter and the current one identical? (Y/n) ",
             color="yellow",
             end="",
         )
         if not input().startswith("Y"):
-            pprint("Aborting", color="red")
+            pretty_print("Aborting", color="red")
             return
 
         python_version = sys.version.split(" ")[0]
@@ -113,12 +69,12 @@ def run():
         ), f"Please use Python 3.10.x (currently at {python_version})"
 
         # now we can assume that the used interpreter is correct
-        pprint(f"Python version {python_version} is supported", color="green")
+        pretty_print(f"Python version {python_version} is supported", color="green")
 
         try:
             run_shell_command("which poetry")
         except AssertionError as e:
-            pprint(
+            pretty_print(
                 "Please make sure to have poetry installed. See "
                 + "https://python-poetry.org/",
                 color="red",
@@ -126,7 +82,7 @@ def run():
             raise e
 
         # now we can assume that all required system software is present
-        pprint(f"Found poetry!", color="green")
+        pretty_print(f"Found poetry!", color="green")
         print_line()
 
         documents_directory = get_documents_directory()
@@ -148,9 +104,9 @@ def run():
         # TODO: infinite loop (select from install|uninstall|abort)
 
     except Exception as e:
-        pprint("Exception occured!", color="red")
+        pretty_print("Exception occured!", color="red")
         raise e
 
 
 if __name__ == "__main__":
-    print(fetch_available_release_tags())
+    print(fetch_release_tags())
