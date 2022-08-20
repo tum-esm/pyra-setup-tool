@@ -1,33 +1,9 @@
 import os
-import subprocess
 import sys
-from .utils.fetch_release_tags import fetch_release_tags
+from .routines.fetch_release_tags import fetch_release_tags
+from .utils.get_documents_dir import get_documents_dir
 from .utils.printing_utils import print_line, pretty_print
-from .utils import types
-
-
-def run_shell_command(command: str, cwd: str = None):
-    p = subprocess.run(
-        command.split(" "),
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        cwd=cwd,
-    )
-    assert p.returncode == 0, (
-        f"command '{command}' failed with exit code "
-        + f"{p.returncode}: stderr = '{p.stderr}'"
-    )
-    return p
-
-
-def get_documents_directory():
-    if sys.platform in ["darwin", "linux"]:
-        return os.environ["HOME"] + "/Documents"
-    elif sys.platform in ["win32", "cygwin"]:
-        return os.environ["USERPROFILE"] + "\\Documents"
-    else:
-        raise Exception(f"Unknown platform '{sys.platform}'")
+from .utils.run_shell_command import run_shell_command
 
 
 def get_local_pyra_versions(pyra_directory: str):
@@ -72,7 +48,8 @@ def run():
         pretty_print(f"Python version {python_version} is supported", color="green")
 
         try:
-            run_shell_command("which poetry")
+            run_shell_command("poetry --version")
+            pretty_print(f"Found poetry!", color="green")
         except AssertionError as e:
             pretty_print(
                 "Please make sure to have poetry installed. See "
@@ -81,11 +58,31 @@ def run():
             )
             raise e
 
+        try:
+            run_shell_command("tar --version")
+            pretty_print(f"Found tar!", color="green")
+        except AssertionError as e:
+            pretty_print(
+                "Please make sure to have tar installed. ",
+                color="red",
+            )
+            raise e
+
+        try:
+            run_shell_command("gh --version")
+            pretty_print(f"Found github cli!", color="green")
+        except AssertionError as e:
+            pretty_print(
+                "Please make sure to have the github cli installed. "
+                + "See https://github.com/cli/cli#installation",
+                color="red",
+            )
+            raise e
+
         # now we can assume that all required system software is present
-        pretty_print(f"Found poetry!", color="green")
         print_line()
 
-        documents_directory = get_documents_directory()
+        documents_directory = get_documents_dir()
         assert os.path.isdir(
             documents_directory
         ), f"Documents directory does not exist. ({documents_directory})"
