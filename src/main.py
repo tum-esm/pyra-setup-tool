@@ -38,18 +38,39 @@ def run():
         check_software_dependencies.check_tar_availability()
         check_software_dependencies.check_github_cli_availability()
 
-        # now we can assume that all required system software is present
-        printing_utils.print_line()
-
         pyra_directory = directory_utils.initialize_pyra_directories()
-        local_pyra_versions = directory_utils.get_local_pyra_versions()
+        printing_utils.pretty_print(
+            f'Successfully initialized local environment inside "{pyra_directory}"'
+        )
 
-        if len(local_pyra_versions) == 0:
-            print("Did not find any local pyra versions.")
-        else:
-            print(f"local pyra versions: {', '.join(local_pyra_versions)}")
+        # now we can assume that the required system state is present
+        # (software dependencies and code/ui directories)
 
-        # TODO: infinite loop (select from install|uninstall|abort)
+        # Infinite loop (select from install|uninstall|abort)
+        while True:
+            printing_utils.print_line()
+            printing_utils.pretty_print(
+                "Enter a command (list-local | list-remote | install | remove | abort): ",
+                color="yellow",
+            )
+            command = input("").strip()
+
+            if command == "list-local":
+                local_pyra_versions = directory_utils.get_local_pyra_versions()
+                if len(local_pyra_versions) == 0:
+                    print("Did not find any local pyra versions.")
+                else:
+                    print(f"Local pyra versions: {', '.join(local_pyra_versions)}")
+            elif command == "list-remote":
+                pass
+            elif command == "install":
+                pass
+            elif command == "remove":
+                pass
+            elif command == "abort":
+                print("Exiting program")
+            else:
+                printing_utils.pretty_print(f'Unknown command "{command}"', color="red")
 
     except Exception as e:
         printing_utils.pretty_print("Exception occured!", color="red")
