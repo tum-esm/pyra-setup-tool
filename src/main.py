@@ -1,5 +1,5 @@
 import sys
-from src.routines import check_software_dependencies
+from src.routines import check_software_dependencies, find_versions
 from src.utils import directory_utils, printing_utils
 
 
@@ -40,7 +40,8 @@ def run():
 
         pyra_directory = directory_utils.initialize_pyra_directories()
         printing_utils.pretty_print(
-            f'Successfully initialized local environment inside "{pyra_directory}"'
+            f'Successfully initialized local environment inside "{pyra_directory}"',
+            color="green",
         )
 
         # now we can assume that the required system state is present
@@ -52,23 +53,31 @@ def run():
             printing_utils.pretty_print(
                 "Enter a command (list-local | list-remote | install | remove | abort): ",
                 color="yellow",
+                end="",
             )
             command = input("").strip()
 
             if command == "list-local":
-                local_pyra_versions = directory_utils.get_local_pyra_versions()
+                local_pyra_versions = find_versions.get_local_versions()
                 if len(local_pyra_versions) == 0:
                     print("Did not find any local pyra versions.")
                 else:
                     print(f"Local pyra versions: {', '.join(local_pyra_versions)}")
+
             elif command == "list-remote":
-                pass
+                remote_pyra_versions = find_versions.get_remote_versions()
+                if len(remote_pyra_versions) == 0:
+                    print("Did not find any remote pyra versions.")
+                else:
+                    print(f"Remote pyra versions: {', '.join(remote_pyra_versions)}")
+
             elif command == "install":
                 pass
             elif command == "remove":
                 pass
             elif command == "abort":
                 print("Exiting program")
+                return
             else:
                 printing_utils.pretty_print(f'Unknown command "{command}"', color="red")
 

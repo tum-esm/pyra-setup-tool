@@ -18,7 +18,7 @@ def get_remote_versions() -> list[str]:
     result = shell_utils.run_shell_command("gh release list --repo tum-esm/pyra")
     releases = [
         r.replace("\t", " ").split(" ")[0][1:]
-        for r in result.stdout.decode().split("\n")
-        if r != ""
+        for r in result.split("\n")
+        if (r != "" and r[1:6] >= "4.0.4")
     ]
     return releases

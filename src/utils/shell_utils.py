@@ -2,7 +2,6 @@ import subprocess
 
 
 def run_shell_command(command: str, cwd: str = None) -> str:
-    print(command)
     p = subprocess.run(
         command.split(" "),
         stdin=subprocess.PIPE,
