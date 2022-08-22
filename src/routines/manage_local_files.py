@@ -1,5 +1,6 @@
 import os
-from src.utils import directory_utils, shell_utils
+import shutil
+from src.utils import directory_utils, shell_utils, printing_utils
 
 
 def download_release(release_tag: str) -> None:
@@ -30,3 +31,30 @@ def download_release(release_tag: str) -> None:
     )
 
     # TODO: open the eplorer at that location using 'explorer ...' (windows) and 'open ...' (unix)
+
+
+def remove_release(release_tag: str) -> None:
+    """
+    For a given release tag "vX.Y.Z", remove
+    the code and its ui-installer.
+    """
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
+    ui_installer_path = os.path.join(
+        pyra_dir, "ui-installers", f"Pyra.UI_{release_tag[1:]}_x64_en-US.msi"
+    )
+    code_dir = os.path.join(pyra_dir, f"pyra-{release_tag[1:]}")
+
+    if os.path.isdir(code_dir):
+        printing_utils.pretty_print(
+            f'Do you want to overwrite the existing directory "{code_dir}"? (Y|n) ',
+            color="yellow",
+        )
+        if not input("").startswith("Y"):
+            printing_utils.pretty_print("aborting", color="red")
+        shutil.rmtree(code_dir)
+
+    # don't ask for confirmation with the installer file
+    # since it is very unlikely that it contains data
+    # that cannot be restored/downloaded again
+    if os.path.isfile(ui_installer_path):
+        os.remove(ui_installer_path)
