@@ -1,6 +1,6 @@
 import os
 import shutil
-from src.utils import directory_utils, shell_utils, printing_utils
+from src.utils import directory_utils, shell_utils
 
 
 def download_release(release_tag: str) -> None:
@@ -45,12 +45,6 @@ def remove_release(release_tag: str) -> None:
     code_dir = os.path.join(pyra_dir, f"pyra-{release_tag[1:]}")
 
     if os.path.isdir(code_dir):
-        printing_utils.pretty_print(
-            f'Do you want to overwrite the existing directory "{code_dir}"? (Y|n) ',
-            color="yellow",
-        )
-        if not input("").startswith("Y"):
-            printing_utils.pretty_print("aborting", color="red")
         shutil.rmtree(code_dir)
 
     # don't ask for confirmation with the installer file

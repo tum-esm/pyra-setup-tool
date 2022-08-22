@@ -1,5 +1,5 @@
 import sys
-from src.routines import check_software_dependencies, find_versions
+from src.routines import check_software_dependencies, find_versions, manage_local_files
 from src.utils import directory_utils, printing_utils
 
 
@@ -9,10 +9,10 @@ def run():
         printing_utils.pretty_print(
             "Welcome to the pyra-setup-tool! Instruction formatting: "
         )
-        printing_utils.pretty_print("  * checkpoints are green ", color="green")
-        printing_utils.pretty_print("  * todos are yellow ", color="yellow")
-        printing_utils.pretty_print("  * errors are red ", color="red")
-        printing_utils.pretty_print("  * information is uncolored ")
+        printing_utils.pretty_print("  * checkpoints = green ", color="green")
+        printing_utils.pretty_print(
+            "  * expecting user input = yellow ", color="yellow"
+        )
         printing_utils.print_line()
 
         # the following check is necessary because I did not manage
@@ -51,7 +51,7 @@ def run():
         while True:
             printing_utils.print_line()
             printing_utils.pretty_print(
-                "Enter a command (list-local | list-remote | install | remove | abort): ",
+                "Enter a command (list-local | list-remote | install | remove | exit) ",
                 color="yellow",
                 end="",
             )
@@ -73,11 +73,31 @@ def run():
 
             elif command == "install":
                 pass
+
             elif command == "remove":
-                pass
-            elif command == "abort":
+                local_pyra_versions = find_versions.get_local_versions()
+                if len(local_pyra_versions) == 0:
+                    print("Did not find any local pyra versions.")
+                    continue
+                printing_utils.pretty_print(
+                    f"Which version should be removed? ({' | '.join(local_pyra_versions)}) ",
+                    color="yellow",
+                    end="",
+                )
+                version_to_be_removed = input("")
+                if version_to_be_removed not in local_pyra_versions:
+                    printing_utils.pretty_print(
+                        f'Invalid version "{version_to_be_removed}"'
+                    )
+                    continue
+
+                manage_local_files.remove_release(f"v{version_to_be_removed}")
+                printing_utils.pretty_print("done!")
+
+            elif command == "exit":
                 print("Exiting program")
                 return
+
             else:
                 printing_utils.pretty_print(f'Unknown command "{command}"', color="red")
 
