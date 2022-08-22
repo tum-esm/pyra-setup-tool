@@ -1,17 +1,9 @@
 import os
 import sys
 from .routines.fetch_release_tags import fetch_release_tags
-from .utils.get_documents_dir import get_documents_dir
+from .utils import directory_utils
 from .utils.printing_utils import print_line, pretty_print
 from .utils.run_shell_command import run_shell_command
-
-
-def get_local_pyra_versions(pyra_directory: str):
-    return [
-        d
-        for d in os.listdir(pyra_directory)
-        if (d.startswith("pyra-") and os.path.isdir(os.path.join(pyra_directory, d)))
-    ]
 
 
 def run():
@@ -82,17 +74,8 @@ def run():
         # now we can assume that all required system software is present
         print_line()
 
-        documents_directory = get_documents_dir()
-        assert os.path.isdir(
-            documents_directory
-        ), f"Documents directory does not exist. ({documents_directory})"
-
-        pyra_directory = os.path.join(documents_directory, "pyra")
-        if not os.path.isdir(pyra_directory):
-            os.mkdir(pyra_directory)
-            print(f"Created directory '{pyra_directory}'")
-
-        local_pyra_versions = get_local_pyra_versions(pyra_directory)
+        pyra_directory = directory_utils.initialize_pyra_directories()
+        local_pyra_versions = directory_utils.get_local_pyra_versions()
         if len(local_pyra_versions) == 0:
             print("Did not find any local pyra versions.")
         else:
