@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def _get_documents_dir() -> str:
+def get_documents_dir() -> str:
     """
     The directory within which pyra will operate:
 
@@ -42,7 +42,7 @@ def initialize_pyra_directories() -> str:
 
     Returns the path to documents/pyra
     """
-    documents_directory = _get_documents_dir()
+    documents_directory = get_documents_dir()
 
     pyra_directory = os.path.join(documents_directory, "pyra")
     ui_installers_directory = os.path.join(documents_directory, "pyra", "ui-installers")
@@ -55,14 +55,3 @@ def initialize_pyra_directories() -> str:
         print(f"Created directory '{ui_installers_directory}'")
 
     return pyra_directory
-
-
-def get_local_pyra_versions() -> list[str]:
-    """Returns a list ["4.0.1", "4.0.2", ...] of pyra versions installed locally"""
-    pyra_directory = os.path.join(_get_documents_dir(), "pyra")
-
-    return [
-        d[5:]
-        for d in os.listdir(pyra_directory)
-        if (d.startswith("pyra-") and os.path.isdir(os.path.join(pyra_directory, d)))
-    ]
