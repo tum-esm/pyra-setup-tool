@@ -15,3 +15,12 @@ def pretty_print(
 
 def print_line():
     print("-" * os.get_terminal_size().columns)
+
+
+def pretty_input(message: str, options: list[str]) -> str:
+    pretty_print(
+        f"{message} ({' | '.join(options)}) ",
+        color="yellow",
+        end="",
+    )
+    return input().strip()

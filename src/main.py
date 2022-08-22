@@ -23,13 +23,11 @@ def run():
             + " system interpreter available via the command 'python'. "
             + f"Currently using the interpreter '{sys.executable}'"
         )
-        printing_utils.pretty_print(
+        if not printing_utils.pretty_input(
             f"Run 'which python' in another shell. Are system-"
-            + "interpreter and the current one identical? (Y/n) ",
-            color="yellow",
-            end="",
-        )
-        if not input().startswith("Y"):
+            + "interpreter and the current one identical?",
+            ["Y", "n"],
+        ).startswith("Y"):
             printing_utils.pretty_print("Aborting", color="red")
             return
 
@@ -50,12 +48,10 @@ def run():
         # Infinite loop (select from install|uninstall|abort)
         while True:
             printing_utils.print_line()
-            printing_utils.pretty_print(
-                "Enter a command (list-local | list-remote | install | remove | exit) ",
-                color="yellow",
-                end="",
+            command = printing_utils.pretty_input(
+                "Enter a command",
+                ["list-local", "list-remote", "install", "remove", "exit"],
             )
-            command = input("").strip()
 
             if command == "list-local":
                 local_pyra_versions = find_versions.get_local_versions()
@@ -79,19 +75,16 @@ def run():
                 if len(local_pyra_versions) == 0:
                     print("Did not find any local pyra versions.")
                     continue
-                printing_utils.pretty_print(
-                    f"Which version should be removed? ({' | '.join(local_pyra_versions)}) ",
-                    color="yellow",
-                    end="",
+                version_to_be_removed = printing_utils.pretty_input(
+                    f"Which version should be removed?", local_pyra_versions
                 )
-                version_to_be_removed = input("")
                 if version_to_be_removed not in local_pyra_versions:
                     printing_utils.pretty_print(
                         f'Invalid version "{version_to_be_removed}"'
                     )
                     continue
 
-                manage_local_files.remove_release(f"v{version_to_be_removed}")
+                manage_local_files.remove_version(version_to_be_removed)
                 printing_utils.pretty_print("done!")
 
             elif command == "exit":

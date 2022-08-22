@@ -33,22 +33,19 @@ def download_release(release_tag: str) -> None:
     # TODO: open the eplorer at that location using 'explorer ...' (windows) and 'open ...' (unix)
 
 
-def remove_release(release_tag: str) -> None:
+def remove_version(version: str) -> None:
     """
-    For a given release tag "vX.Y.Z", remove
+    For a given release version "x.y.z", remove
     the code and its ui-installer.
     """
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
     ui_installer_path = os.path.join(
-        pyra_dir, "ui-installers", f"Pyra.UI_{release_tag[1:]}_x64_en-US.msi"
+        pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"
     )
-    code_dir = os.path.join(pyra_dir, f"pyra-{release_tag[1:]}")
+    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
 
     if os.path.isdir(code_dir):
         shutil.rmtree(code_dir)
 
-    # don't ask for confirmation with the installer file
-    # since it is very unlikely that it contains data
-    # that cannot be restored/downloaded again
     if os.path.isfile(ui_installer_path):
         os.remove(ui_installer_path)
