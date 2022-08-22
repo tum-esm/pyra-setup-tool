@@ -1,7 +1,7 @@
 import subprocess
 
 
-def run_shell_command(command: str, cwd: str = None):
+def run_shell_command(command: str, cwd: str = None) -> str:
     print(command)
     p = subprocess.run(
         command.split(" "),
@@ -14,4 +14,4 @@ def run_shell_command(command: str, cwd: str = None):
         f"command '{command}' failed with exit code "
         + f"{p.returncode}: stderr = '{p.stderr}'"
     )
-    return p
+    return p.stdout.decode()
