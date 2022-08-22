@@ -3,7 +3,7 @@ from src.routines import check_software_dependencies, find_versions, manage_loca
 from src.utils import directory_utils, printing_utils
 
 
-def run():
+def run() -> None:
     try:
         printing_utils.print_line()
         printing_utils.pretty_print(
