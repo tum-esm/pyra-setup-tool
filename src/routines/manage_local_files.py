@@ -3,18 +3,18 @@ import shutil
 from src.utils import directory_utils, shell_utils
 
 
-def download_release(release_tag: str) -> None:
+def download_version(version: str) -> None:
     """
-    For a given release tag "vX.Y.Z", download
+    For a given release version "x.y.z", download
     the code and its ui-installer.
     """
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-    tar_name = f"pyra-{release_tag[1:]}.tar.gz"
-    ui_installer_name = f"Pyra.UI_{release_tag[1:]}_x64_en-US.msi"
+    tar_name = f"pyra-{version}.tar.gz"
+    ui_installer_name = f"Pyra.UI_{version}_x64_en-US.msi"
 
     # download codebase tarball, extract code, and remove tarball
     shell_utils.run_shell_command(
-        f"gh release download --repo tum-esm/pyra --archive=tar.gz {release_tag}",
+        f"gh release download --repo tum-esm/pyra --archive=tar.gz v{version}",
         cwd=pyra_dir,
     )
     shell_utils.run_shell_command(f"tar -xf {tar_name}", cwd=pyra_dir)
@@ -22,15 +22,13 @@ def download_release(release_tag: str) -> None:
 
     # download ui installer, and move it to pyra/ui-installers
     shell_utils.run_shell_command(
-        f"gh release download --repo tum-esm/pyra {release_tag}",
+        f"gh release download --repo tum-esm/pyra v{version}",
         cwd=pyra_dir,
     )
     os.rename(
         os.path.join(pyra_dir, ui_installer_name),
         os.path.join(pyra_dir, "ui-installer", ui_installer_name),
     )
-
-    # TODO: open the eplorer at that location using 'explorer ...' (windows) and 'open ...' (unix)
 
 
 def remove_version(version: str) -> None:
