@@ -1,7 +1,8 @@
+import json
 import os
 import re
 import shutil
-from src.utils import directory_utils, shell_utils
+from src.utils import directory_utils, migration_utils, printing_utils, shell_utils
 
 
 def install_version(version: str) -> None:
@@ -47,9 +48,29 @@ def install_version(version: str) -> None:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
 
-# TODO
 def migrate_config(from_version: str, to_version: str) -> None:
-    pass
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
+    src_path = os.path.join(pyra_dir, f"pyra-{from_version}", "config", "config.json")
+    dst_path = os.path.join(pyra_dir, f"pyra-{to_version}", "config", "config.json")
+
+    try:
+        with open(src_path, "r") as f:
+            old_config = json.load(f)
+
+        # migrate from version n to n+1 to n+2 to ... until the final version is reached
+        current_config, current_config_version = old_config, from_version
+        while current_config_version != to_version:
+            current_config, current_config_version = migration_utils.run(
+                current_config, current_config_version
+            )
+    except Exception as e:
+        printing_utils.pretty_print(
+            f'Could not migrate config. The config of version "{from_version}" might be invalid: {e}',
+            color="red",
+        )
+
+    with open(dst_path, "w") as f:
+        json.dump(current_config)
 
 
 def remove_version(version: str) -> None:
