@@ -5,7 +5,7 @@ from src.routines import (
     installation,
     manage_local_files,
 )
-from src.utils import directory_utils, printing_utils
+from src.utils import directory_utils, printing_utils, version_utils
 
 
 def run() -> None:
@@ -93,7 +93,25 @@ def run() -> None:
 
                 manage_local_files.download_version(version_to_be_installed)
                 installation.install_version(version_to_be_installed)
+
                 # TODO: migrate config
+                available_versions_to_migrate_from = (
+                    find_versions.get_versions_to_migrate_from(version_to_be_installed)
+                )
+                if len(available_versions_to_migrate_from) == 0:
+                    print("Skipping migration, no available versions to migrate from")
+                else:
+                    version_to_migrate_from = printing_utils.pretty_input(
+                        f"Should we reuse the config.json from a previously installed version?",
+                        [
+                            "no",
+                            *[f"use {v}" for v in available_versions_to_migrate_from],
+                        ],
+                    ).replace("use ", "")
+                if version_to_migrate_from != "no":
+                    installation.migrate_config(
+                        version_to_migrate_from, version_to_be_installed
+                    )
 
                 printing_utils.pretty_print("done!", color="green")
 
