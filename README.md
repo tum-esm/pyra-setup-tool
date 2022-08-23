@@ -39,3 +39,14 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted
 <br/>
 
 You also need to install **Poetry** (https://python-poetry.org/) and the GitHub CLI (https://cli.github.com/).
+
+<br/>
+
+## Email Account for error emails
+
+_documentation coming soon_
+
+With Gmail accounts, "Less Secure Apps" have been deactivated.
+https://support.google.com/accounts/answer/6010255?hl=de&visit_id=637914296292859831-802637670&p=less-secure-apps&rd=1
+
+Solution: Use "App passwords", which require 2FA
