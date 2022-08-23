@@ -94,7 +94,6 @@ def run() -> None:
                 manage_local_files.download_version(version_to_be_installed)
                 installation.install_version(version_to_be_installed)
 
-                # TODO: migrate config
                 available_versions_to_migrate_from = (
                     find_versions.get_versions_to_migrate_from(version_to_be_installed)
                 )
@@ -108,10 +107,10 @@ def run() -> None:
                             *[f"use {v}" for v in available_versions_to_migrate_from],
                         ],
                     ).replace("use ", "")
-                if version_to_migrate_from != "no":
-                    installation.migrate_config(
-                        version_to_migrate_from, version_to_be_installed
-                    )
+                    if version_to_migrate_from != "no":
+                        installation.migrate_config(
+                            version_to_migrate_from, version_to_be_installed
+                        )
 
                 printing_utils.pretty_print("done!", color="green")
 

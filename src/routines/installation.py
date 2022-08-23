@@ -2,6 +2,7 @@ import json
 import os
 import re
 import shutil
+import sys
 from src.utils import directory_utils, migration_utils, printing_utils, shell_utils
 
 
@@ -14,6 +15,10 @@ def install_version(version: str) -> None:
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
     code_dir = os.path.join(pyra_dir, f"pyra-{version}")
 
+    if sys.platform not in ["win32", "cygwin"]:
+        print("Skipping installation on non-windows-platforms")
+        return
+
     # Install system dependencies with poetry
     for command in [
         "poetry config virtualenvs.create false",
@@ -21,17 +26,20 @@ def install_version(version: str) -> None:
         "poetry install",
     ]:
         shell_utils.run_shell_command(command, cwd=code_dir)
+    printing_utils.pretty_print("Installed code dependencies", color="green")
 
     # Run UI installer
     ui_installer_path = os.path.join(
         pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"
     )
     shell_utils.run_shell_command(f"msiexec /i {ui_installer_path} /qf")
+    printing_utils.pretty_print("Installed the UI", color="green")
 
     # Update "pyra-cli.bat" file
     with open(os.path.join(pyra_dir, f"pyra-cli.bat"), "w") as f:
         pyra_cli_path = os.path.join(code_dir, "packages", "cli", "main.py")
         f.write(f"@echo off\necho.\npython {pyra_cli_path} %")
+    printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
     # Remove all old directory shortcuts
     p = re.compile("^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
@@ -46,6 +54,10 @@ def install_version(version: str) -> None:
         os.path.join(desktop_dir, f"open-pyra-{version}-directory.bat"), "w"
     ) as f:
         f.write(f"@ECHO OFF\nstart {code_dir}")
+
+    printing_utils.pretty_print(
+        "Created desktop shortcut to code directory", color="green"
+    )
 
 
 def migrate_config(from_version: str, to_version: str) -> None:
@@ -63,6 +75,9 @@ def migrate_config(from_version: str, to_version: str) -> None:
             current_config, current_config_version = migration_utils.run(
                 current_config, current_config_version
             )
+        printing_utils.pretty_print(
+            f"Migrated config from {from_version} to {to_version}", color="green"
+        )
     except Exception as e:
         printing_utils.pretty_print(
             f'Could not migrate config. The config of version "{from_version}" might be invalid: {e}',

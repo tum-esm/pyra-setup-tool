@@ -1,6 +1,6 @@
 import os
 import shutil
-from src.utils import directory_utils, shell_utils
+from src.utils import directory_utils, printing_utils, shell_utils
 
 
 def download_version(version: str) -> None:
@@ -19,6 +19,7 @@ def download_version(version: str) -> None:
     )
     shell_utils.run_shell_command(f"tar -xf {tar_name}", cwd=pyra_dir)
     shell_utils.run_shell_command(f"rm {tar_name}", cwd=pyra_dir)
+    printing_utils.pretty_print("Downloaded code", color="green")
 
     # download ui installer, and move it to pyra/ui-installers
     shell_utils.run_shell_command(
@@ -27,8 +28,9 @@ def download_version(version: str) -> None:
     )
     os.rename(
         os.path.join(pyra_dir, ui_installer_name),
-        os.path.join(pyra_dir, "ui-installer", ui_installer_name),
+        os.path.join(pyra_dir, "ui-installers", ui_installer_name),
     )
+    printing_utils.pretty_print("Downloaded UI", color="green")
 
 
 def remove_version(version: str) -> None:

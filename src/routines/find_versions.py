@@ -10,7 +10,7 @@ def get_local_versions() -> list[str]:
     """
     pyra_directory = os.path.join(directory_utils.get_documents_dir(), "pyra")
 
-    folder_pattern = re.compile("^pyra\-\d+\.\d+\.\d+\.$")
+    folder_pattern = re.compile("^pyra\-\d+\.\d+\.\d+$")
     return [
         d[5:]
         for d in os.listdir(pyra_directory)
