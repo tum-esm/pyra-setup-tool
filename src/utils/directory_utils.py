@@ -27,6 +27,24 @@ def get_documents_dir() -> str:
     return documents_directory
 
 
+def get_desktop_dir() -> str:
+    """
+    The directory where shortcuts should be placed
+    """
+    if sys.platform in ["darwin", "linux"]:
+        desktop_directory = os.environ["HOME"] + "/Desktop"
+    elif sys.platform in ["win32", "cygwin"]:
+        desktop_directory = os.environ["USERPROFILE"] + "\\Desktop"
+    else:
+        raise Exception(f"Unknown platform '{sys.platform}'")
+
+    assert os.path.isdir(
+        desktop_directory
+    ), f"Desktop directory does not exist. ({desktop_directory})"
+
+    return desktop_directory
+
+
 def initialize_pyra_directories() -> str:
     """
     Makes sure that PYRA's operatting directories exist.
