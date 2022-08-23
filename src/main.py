@@ -1,5 +1,10 @@
 import sys
-from src.routines import check_software_dependencies, find_versions, manage_local_files
+from src.routines import (
+    check_software_dependencies,
+    find_versions,
+    installation,
+    manage_local_files,
+)
 from src.utils import directory_utils, printing_utils
 
 
@@ -15,9 +20,8 @@ def run() -> None:
         )
         printing_utils.print_line()
 
-        # the following check is necessary because I did not manage
-        # to (possibly) deactivate the current venv from within
-        # a subprocess/system call, etc.
+        # The following check is necessary because I did not manage to de-
+        # activate the current venv from within a subprocess/system call/etc.
         printing_utils.pretty_print(
             "Please DO NOT use a virtual environment for PYRA! Use the"
             + " system interpreter available via the command 'python'. "
@@ -42,10 +46,10 @@ def run() -> None:
             color="green",
         )
 
-        # now we can assume that the required system state is present
+        # Now we can assume that the required system state is present
         # (software dependencies and code/ui directories)
 
-        # Infinite loop (select from install|uninstall|abort)
+        # Infinite loop (waiting for new command -> execute command -> ...)
         while True:
             printing_utils.print_line()
             command = printing_utils.pretty_input(
@@ -68,7 +72,30 @@ def run() -> None:
                     print(f"Remote pyra versions: {', '.join(remote_pyra_versions)}")
 
             elif command == "install":
-                pass
+                local_pyra_versions = find_versions.get_local_versions()
+                remote_pyra_versions = find_versions.get_remote_versions()
+                if len(remote_pyra_versions) == 0:
+                    print("Did not find any remote pyra versions.")
+                    continue
+                version_to_be_installed = printing_utils.pretty_input(
+                    f"Which version should be installed?", remote_pyra_versions
+                )
+                if version_to_be_installed not in remote_pyra_versions:
+                    printing_utils.pretty_print(
+                        f'Invalid version "{version_to_be_installed}"'
+                    )
+                    continue
+                if version_to_be_installed in local_pyra_versions:
+                    printing_utils.pretty_print(
+                        f'Please uninstall the local "{version_to_be_installed}" first'
+                    )
+                    continue
+
+                manage_local_files.download_version(version_to_be_installed)
+                installation.install_version(version_to_be_installed)
+                # TODO: migrate config
+
+                printing_utils.pretty_print("done!", color="green")
 
             elif command == "remove":
                 local_pyra_versions = find_versions.get_local_versions()
@@ -85,7 +112,7 @@ def run() -> None:
                     continue
 
                 manage_local_files.remove_version(version_to_be_removed)
-                printing_utils.pretty_print("done!")
+                printing_utils.pretty_print("done!", color="green")
 
             elif command == "exit":
                 print("Exiting program")
