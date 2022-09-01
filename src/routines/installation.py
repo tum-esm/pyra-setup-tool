@@ -47,7 +47,8 @@ def install_version(version: str) -> None:
     # Add "pyra-cli" to user environment variables
     if pyra_dir not in os.environ["PATH"].replace(f"{pyra_dir}-setup-tool", ""):
         printing_utils.pretty_input(
-            f'Make the "pyra-cli" command available, by adding "{pyra_dir}" to your "user environment variables". See the pyra setup docs.',
+            f'Make the "pyra-cli" command available, by adding "{pyra_dir}" to '
+            + f'your "user environment variables". See the pyra setup docs.',
             ["ok"],
         )
     else:
@@ -90,7 +91,8 @@ def migrate_config(from_version: str, to_version: str) -> None:
         )
     except Exception as e:
         printing_utils.pretty_print(
-            f'Could not migrate config. The config of version "{from_version}" might be invalid: {e}',
+            f'Could not migrate config. The config of version "{from_version}" '
+            + f"might be invalid: {e}",
             color="red",
         )
 
