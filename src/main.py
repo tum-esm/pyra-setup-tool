@@ -5,7 +5,7 @@ from src.routines import (
     installation,
     manage_local_files,
 )
-from src.utils import directory_utils, printing_utils, version_utils
+from src.utils import directory_utils, printing_utils
 
 
 def run() -> None:
@@ -130,6 +130,8 @@ def run() -> None:
             else:
                 printing_utils.pretty_print(f'Unknown command "{command}"', color="red")
 
+    except KeyboardInterrupt:
+        printing_utils.pretty_print("Exiting program")
     except Exception as e:
         printing_utils.pretty_print("Exception occured!", color="red")
         raise e

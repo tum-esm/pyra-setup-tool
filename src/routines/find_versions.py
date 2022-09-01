@@ -23,12 +23,16 @@ def get_local_versions() -> list[str]:
 
 
 def get_remote_versions() -> list[str]:
-    """Returns a list ["4.0.1", "4.0.2", ...] of pyra versions available on GitHub"""
+    """
+    Returns a list ["4.0.1", "4.0.2", ...] of pyra versions available
+    on GitHub. Only considers versions starting from 4.0.5 since these
+    are official release versions (not alphas or betas).
+    """
     result = shell_utils.run_shell_command("gh release list --repo tum-esm/pyra")
     releases = [
         r.replace("\t", " ").split(" ")[0][1:]
         for r in result.split("\n")
-        if ((r != "") and (version_utils.version_difference("4.0.3", r[1:6]) == 1))
+        if ((r != "") and (version_utils.version_difference("4.0.4", r[1:6]) == 1))
     ]
     return releases
 
