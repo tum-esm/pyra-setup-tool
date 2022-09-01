@@ -41,6 +41,23 @@ def install_version(version: str) -> None:
         f.write(f"@echo off\necho.\npython {pyra_cli_path} %")
     printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
+    # Add "pyra-cli" to user environment variables
+    if f"{pyra_dir};" not in os.environ["PATH"]:
+        user_env_vars_query = shell_utils.run_shell_command(
+            "reg query HKCU\Environment /v PATH"
+        )
+        user_env_vars_query_list = list(
+            filter(lambda s: len(s) > 0, user_env_vars_query.split(" "))
+        )
+        try:
+            assert len(user_env_vars_query_list) == 3
+            assert user_env_vars_query_list[0] == "PATH"
+            assert user_env_vars_query_list[1] == "REG_SZ"
+            user_path_variable = user_env_vars_query_list[2].strip(";")
+            shell_utils.run_shell_command(f'setx PATH "{user_path_variable};{pyra_dir}"')
+        except AssertionError:
+            printing_utils.pretty_print("Could not user variables as expected.", color="red")
+
     # Remove all old directory shortcuts
     p = re.compile("^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
     old_shortcuts = [s for s in os.listdir(desktop_dir) if p.match(s) is not None]
