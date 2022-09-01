@@ -25,10 +25,13 @@ def install_version(version: str) -> None:
         "poetry env use system",
         "poetry install",
     ]:
-        shell_utils.run_shell_command(command, cwd=code_dir)
+        shell_utils.run_shell_command(command, cwd=code_dir, silent=False)
     printing_utils.pretty_print("Installed code dependencies", color="green")
 
     # Run UI installer
+    printing_utils.pretty_print(
+        "Please install the UI using the installer that opens now", color="yellow"
+    )
     ui_installer_path = os.path.join(
         pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"
     )
@@ -42,21 +45,15 @@ def install_version(version: str) -> None:
     printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
     # Add "pyra-cli" to user environment variables
-    if f"{pyra_dir};" not in os.environ["PATH"]:
-        user_env_vars_query = shell_utils.run_shell_command(
-            "reg query HKCU\Environment /v PATH"
+    if pyra_dir not in os.environ["PATH"].replace(f"{pyra_dir}-setup-tool", ""):
+        printing_utils.pretty_input(
+            f'Make the "pyra-cli" command available, by adding "{pyra_dir}" to your "user environment variables". See the pyra setup docs.',
+            ["ok"],
         )
-        user_env_vars_query_list = list(
-            filter(lambda s: len(s) > 0, user_env_vars_query.split(" "))
+    else:
+        printing_utils.pretty_print(
+            '"pyra-cli" command already in user environment variables', color="green"
         )
-        try:
-            assert len(user_env_vars_query_list) == 3
-            assert user_env_vars_query_list[0] == "PATH"
-            assert user_env_vars_query_list[1] == "REG_SZ"
-            user_path_variable = user_env_vars_query_list[2].strip(";")
-            shell_utils.run_shell_command(f'setx PATH "{user_path_variable};{pyra_dir}"')
-        except AssertionError:
-            printing_utils.pretty_print("Could not user variables as expected.", color="red")
 
     # Remove all old directory shortcuts
     p = re.compile("^open-pyra-\d+\.\d+\.\d+-directory\.bat$")

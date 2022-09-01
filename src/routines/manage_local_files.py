@@ -18,7 +18,7 @@ def download_version(version: str) -> None:
         cwd=pyra_dir,
     )
     shell_utils.run_shell_command(f"tar -xf {tar_name}", cwd=pyra_dir)
-    shell_utils.run_shell_command(f"rm {tar_name}", cwd=pyra_dir)
+    os.remove(os.path.join(pyra_dir, tar_name))
     printing_utils.pretty_print("Downloaded code", color="green")
 
     # download ui installer, and move it to pyra/ui-installers
