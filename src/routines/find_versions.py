@@ -42,9 +42,7 @@ def get_versions_to_migrate_from(migration_target_version: str) -> list[str]:
         if (
             (version_utils.version_difference(v, migration_target_version) == 1)
             and os.path.isfile(
-                os.path.join(
-                    documents_dir, "pyra", f"pyra-{v}", "config", "config.json"
-                )
+                os.path.join(documents_dir, "pyra", f"pyra-{v}", "config", "config.json")
             )
         )
     ]

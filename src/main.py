@@ -11,13 +11,9 @@ from src.utils import directory_utils, printing_utils, version_utils
 def run() -> None:
     try:
         printing_utils.print_line()
-        printing_utils.pretty_print(
-            "Welcome to the pyra-setup-tool! Instruction formatting: "
-        )
+        printing_utils.pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")
         printing_utils.pretty_print("  * checkpoints = green ", color="green")
-        printing_utils.pretty_print(
-            "  * expecting user input = yellow ", color="yellow"
-        )
+        printing_utils.pretty_print("  * expecting user input = yellow ", color="yellow")
         printing_utils.print_line()
 
         # The following check is necessary because I did not manage to de-
@@ -81,9 +77,7 @@ def run() -> None:
                     f"Which version should be installed?", remote_pyra_versions
                 )
                 if version_to_be_installed not in remote_pyra_versions:
-                    printing_utils.pretty_print(
-                        f'Invalid version "{version_to_be_installed}"'
-                    )
+                    printing_utils.pretty_print(f'Invalid version "{version_to_be_installed}"')
                     continue
                 if version_to_be_installed in local_pyra_versions:
                     printing_utils.pretty_print(
@@ -123,9 +117,7 @@ def run() -> None:
                     f"Which version should be removed?", local_pyra_versions
                 )
                 if version_to_be_removed not in local_pyra_versions:
-                    printing_utils.pretty_print(
-                        f'Invalid version "{version_to_be_removed}"'
-                    )
+                    printing_utils.pretty_print(f'Invalid version "{version_to_be_removed}"')
                     continue
 
                 manage_local_files.remove_version(version_to_be_removed)

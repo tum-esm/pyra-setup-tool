@@ -50,14 +50,10 @@ def install_version(version: str) -> None:
     # Create new shortcut for pyra-x.y.z directory. I used a ".bat"
     # script for this instead of a "windows shortcut" because the
     # latter are too much effort to create or require a python library
-    with open(
-        os.path.join(desktop_dir, f"open-pyra-{version}-directory.bat"), "w"
-    ) as f:
+    with open(os.path.join(desktop_dir, f"open-pyra-{version}-directory.bat"), "w") as f:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
-    printing_utils.pretty_print(
-        "Created desktop shortcut to code directory", color="green"
-    )
+    printing_utils.pretty_print("Created desktop shortcut to code directory", color="green")
 
 
 def migrate_config(from_version: str, to_version: str) -> None:

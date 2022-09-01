@@ -8,9 +8,7 @@ def check_python_version() -> None:
         "3.10."
     ), f"Please use Python 3.10.x (currently at {python_version})"
 
-    printing_utils.pretty_print(
-        f"Python version {python_version} is supported", color="green"
-    )
+    printing_utils.pretty_print(f"Python version {python_version} is supported", color="green")
 
 
 def check_poetry_availability() -> None:
@@ -19,8 +17,7 @@ def check_poetry_availability() -> None:
         printing_utils.pretty_print(f"Found poetry!", color="green")
     except AssertionError as e:
         printing_utils.pretty_print(
-            "Please make sure to have poetry installed. See "
-            + "https://python-poetry.org/",
+            "Please make sure to have poetry installed. See " + "https://python-poetry.org/",
             color="red",
         )
         raise e
