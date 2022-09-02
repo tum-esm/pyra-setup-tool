@@ -32,9 +32,11 @@ def run() -> None:
             return
 
         check_software_dependencies.check_python_version()
-        check_software_dependencies.check_poetry_availability()
-        check_software_dependencies.check_tar_availability()
-        check_software_dependencies.check_github_cli_availability()
+        check_software_dependencies.check_command_availability("poetry")
+        check_software_dependencies.check_command_availability("tar")
+        check_software_dependencies.check_command_availability("git")
+        check_software_dependencies.check_command_availability("gh", name="github cli")
+        check_software_dependencies.check_setup_tool_version()
 
         pyra_directory = directory_utils.initialize_pyra_directories()
         printing_utils.pretty_print(

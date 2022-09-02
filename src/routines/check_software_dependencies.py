@@ -1,4 +1,5 @@
 import sys
+from typing import Optional
 from src.utils import shell_utils, printing_utils
 
 
@@ -11,38 +12,27 @@ def check_python_version() -> None:
     printing_utils.pretty_print(f"Python version {python_version} is supported", color="green")
 
 
-def check_poetry_availability() -> None:
+def check_command_availability(command: str, name: Optional[str] = None) -> None:
+    pretty_command_name = command if name is None else name
     try:
-        shell_utils.run_shell_command("poetry --version")
-        printing_utils.pretty_print(f"Found poetry!", color="green")
+        shell_utils.run_shell_command(f"{command} --version")
+        printing_utils.pretty_print(f"Found {pretty_command_name}!", color="green")
     except AssertionError as e:
         printing_utils.pretty_print(
-            "Please make sure to have poetry installed. See " + "https://python-poetry.org/",
+            f"Please make sure to have {pretty_command_name} installed.",
             color="red",
         )
         raise e
 
 
-def check_tar_availability() -> None:
-    try:
-        shell_utils.run_shell_command("tar --version")
-        printing_utils.pretty_print(f"Found tar!", color="green")
-    except AssertionError as e:
+def check_setup_tool_version() -> None:
+    pull_stdout = shell_utils.run_shell_command("git pull")
+    if pull_stdout == "Already up to date.":
+        printing_utils.pretty_print("Setup tool is up to date.")
+    else:
+        printing_utils.pretty_print("Updated the setup tool.")
         printing_utils.pretty_print(
-            "Please make sure to have tar installed. ",
-            color="red",
+            f"Please run the setup tool again!",
+            color="yellow",
         )
-        raise e
-
-
-def check_github_cli_availability() -> None:
-    try:
-        shell_utils.run_shell_command("gh --version")
-        printing_utils.pretty_print(f"Found github cli!", color="green")
-    except AssertionError as e:
-        printing_utils.pretty_print(
-            "Please make sure to have the github cli installed. "
-            + "See https://github.com/cli/cli#installation",
-            color="red",
-        )
-        raise e
+        sys.exit()
