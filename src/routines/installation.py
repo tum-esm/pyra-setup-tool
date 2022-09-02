@@ -99,7 +99,7 @@ def migrate_config(from_version: str, to_version: str) -> None:
         )
 
     with open(dst_path, "w") as f:
-        json.dump(current_config)
+        json.dump(current_config, f)
 
 
 def remove_version(version: str) -> None:

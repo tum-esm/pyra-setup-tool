@@ -107,9 +107,9 @@ def run() -> None:
                         f"Should we reuse the config.json from a previously installed version?",
                         [
                             "no",
-                            *[f"use {v}" for v in available_versions_to_migrate_from],
+                            *available_versions_to_migrate_from,
                         ],
-                    ).replace("use ", "")
+                    )
                     if version_to_migrate_from != "no":
                         installation.migrate_config(
                             version_to_migrate_from, version_to_be_installed
