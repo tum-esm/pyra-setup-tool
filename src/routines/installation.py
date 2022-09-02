@@ -35,7 +35,12 @@ def install_version(version: str) -> None:
     ui_installer_path = os.path.join(
         pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"
     )
-    shell_utils.run_shell_command(f"msiexec /i {ui_installer_path} /qf")
+    try:
+        shell_utils.run_shell_command(f"msiexec /i {ui_installer_path} /qf")
+    except AssertionError:
+        # ignore it when user cancels the installer window
+        pass
+
     printing_utils.pretty_print("Installed the UI", color="green")
 
     # Update "pyra-cli.bat" file
