@@ -41,19 +41,21 @@ def install_version(version: str) -> None:
     # Update "pyra-cli.bat" file
     with open(os.path.join(pyra_dir, f"pyra-cli.bat"), "w") as f:
         pyra_cli_path = os.path.join(code_dir, "packages", "cli", "main.py")
-        f.write(f"@echo off\necho.\npython {pyra_cli_path} %")
+        f.write("@echo off\n")
+        f.write("echo.\n")
+        f.write(f"python {pyra_cli_path} %*")
     printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
     # Add "pyra-cli" to user environment variables
-    if pyra_dir not in os.environ["PATH"].replace(f"{pyra_dir}-setup-tool", ""):
+    if pyra_dir in os.environ["PATH"].split(";"):
+        printing_utils.pretty_print(
+            '"pyra-cli" command already in user environment variables', color="green"
+        )
+    else:
         printing_utils.pretty_input(
             f'Make the "pyra-cli" command available, by adding "{pyra_dir}" to '
             + f'your "user environment variables". See the pyra setup docs.',
             ["ok"],
-        )
-    else:
-        printing_utils.pretty_print(
-            '"pyra-cli" command already in user environment variables', color="green"
         )
 
     # Remove all old directory shortcuts
