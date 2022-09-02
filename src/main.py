@@ -1,11 +1,13 @@
+import sys
+
 try:
     import colorama
 except ImportError:
     print('Please run "pip install colorama" first')
+    sys.exit()
 
 colorama.init()
 
-import sys
 from src.routines import (
     check_software_dependencies,
     find_versions,
