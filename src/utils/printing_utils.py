@@ -1,5 +1,6 @@
 import os
 from typing import Literal, Optional
+from colorama import Fore, Style
 
 
 def pretty_print(
@@ -7,9 +8,9 @@ def pretty_print(
     color: Optional[Literal["red", "green", "yellow"]] = None,
     end: str = "\n",
 ) -> None:
-    color_sequences = {"red": "\033[91m", "green": "\033[92m", "yellow": "\033[93m"}
+    color_sequences = {"red": Fore.RED, "green": Fore.GREEN, "yellow": Fore.YELLOW}
     if color is not None:
-        text = f"{color_sequences[color]}{text}\033[00m"
+        text = color_sequences[color] + text + Style.RESET_ALL
     print(text, end=end)
 
 

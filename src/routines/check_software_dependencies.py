@@ -28,7 +28,7 @@ def check_command_availability(command: str, name: Optional[str] = None) -> None
 def check_setup_tool_version() -> None:
     pull_stdout = shell_utils.run_shell_command("git pull")
     if pull_stdout == "Already up to date.":
-        printing_utils.pretty_print("Setup tool is up to date.")
+        printing_utils.pretty_print("Setup tool is up to date.", color="green")
     else:
         printing_utils.pretty_print("Updated the setup tool.")
         printing_utils.pretty_print(

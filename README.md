@@ -2,4 +2,4 @@
 
 Instructions can be found in the PYRA documentation: http://tum-esm.github.io/pyra/docs/user-guide/setup
 
-_The tool does not have any dependencies except for the standard Python 3.10 library._
+_The only dependency except for the Python 3.10 standard library is `colorama`. This is the only simple way to add colors because Windows does not support Ansi colors._

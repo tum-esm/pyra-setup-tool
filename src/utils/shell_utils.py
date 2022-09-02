@@ -32,4 +32,4 @@ def run_shell_command(command: str, cwd: Optional[str] = None, silent: bool = Tr
     assert p.returncode == 0, (
         f"command '{command}' failed with exit code " + f"{p.returncode}: stderr = '{stderr}'"
     )
-    return stdout
+    return stdout.strip()
