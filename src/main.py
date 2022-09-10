@@ -61,9 +61,26 @@ def run() -> None:
             printing_utils.print_line()
             command = printing_utils.pretty_input(
                 "Enter a command",
-                ["status", "install", "remove", "exit"],
+                ["help", "status", "install", "remove", "exit"],
             )
 
+            if command == "help":
+                print("status:")
+                print("    * list locally install versions")
+                print("    * list available release version")
+                print("    * show, if pyra-cli command is installed in environment path")
+                print("    * show which pyra version the cli-command currently uses")
+                print("install:")
+                print("    * choose an available release version")
+                print("    * download code from github")
+                print("    * install dependencies")
+                print("    * download UI and run windows installer")
+                print("    * set the pyra-cli to point to the new version")
+                print("    * test if pyra-cli command is installed in environment path")
+                print("    * add desktop-shortcut to code directory")
+                print("    * migrate config from an older version")
+                print("remove:")
+                print("    * remove a local version")
             if command == "status":
                 local_pyra_versions = find_versions.get_local_versions()
                 if len(local_pyra_versions) == 0:
