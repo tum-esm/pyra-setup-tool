@@ -1,5 +1,7 @@
+from genericpath import isfile
 import os
 import re
+from typing import Optional
 from src.utils import shell_utils, directory_utils, version_utils
 
 
@@ -50,3 +52,24 @@ def get_versions_to_migrate_from(migration_target_version: str) -> list[str]:
             )
         )
     ]
+
+
+def get_version_used_in_cli() -> Optional[str]:
+    pyra_cli_bat = os.path.join(directory_utils.get_documents_dir(), "pyra", "pyra-cli.bat")
+
+    if not os.path.isfile(pyra_cli_bat):
+        return None
+
+    with open(pyra_cli_bat) as f:
+        filecontent = f.read()
+
+    matches = list(
+        re.finditer(
+            r"pyra(\\|\/)pyra\-\d+\.\d+\.\d+(\\|\/)packages(\\|\/)cli(\\|\/)main\.py\s\%\*",
+            filecontent,
+        )
+    )
+    if len(matches) != 1:
+        return None
+
+    return matches[0].group()[10:-24]

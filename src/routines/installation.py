@@ -52,7 +52,7 @@ def install_version(version: str) -> None:
     printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
     # Add "pyra-cli" to user environment variables
-    if pyra_dir in os.environ["PATH"].split(";"):
+    if pyra_cli_in_env_path():
         printing_utils.pretty_print(
             '"pyra-cli" command already in user environment variables', color="green"
         )
@@ -123,3 +123,9 @@ def remove_version(version: str) -> None:
 
     if os.path.isfile(ui_installer_path):
         os.remove(ui_installer_path)
+
+
+def pyra_cli_in_env_path() -> bool:
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
+    env_paths = shell_utils.run_shell_command(f"echo %PATH%").split(";")
+    return pyra_dir in env_paths

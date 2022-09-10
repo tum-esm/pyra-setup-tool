@@ -61,22 +61,34 @@ def run() -> None:
             printing_utils.print_line()
             command = printing_utils.pretty_input(
                 "Enter a command",
-                ["list-local", "list-remote", "install", "remove", "exit"],
+                ["status", "install", "remove", "exit"],
             )
 
-            if command == "list-local":
+            if command == "status":
                 local_pyra_versions = find_versions.get_local_versions()
                 if len(local_pyra_versions) == 0:
                     print("Did not find any local pyra versions.")
                 else:
                     print(f"Local pyra versions: {', '.join(local_pyra_versions)}")
 
-            elif command == "list-remote":
                 remote_pyra_versions = find_versions.get_remote_versions()
                 if len(remote_pyra_versions) == 0:
                     print("Did not find any remote pyra versions.")
                 else:
                     print(f"Remote pyra versions: {', '.join(remote_pyra_versions)}")
+
+                print("Pyra CLI found in environment PATH variable: ", end="")
+                if installation.pyra_cli_in_env_path():
+                    printing_utils.pretty_print("Yes", color="green")
+                else:
+                    printing_utils.pretty_print("No", color="red")
+
+                print("Pyra CLI is pointing to version: ", end="")
+                cli_version = find_versions.get_version_used_in_cli()
+                if cli_version is not None:
+                    printing_utils.pretty_print(cli_version, color="green")
+                else:
+                    printing_utils.pretty_print("undefined", color="red")
 
             elif command == "install":
                 local_pyra_versions = find_versions.get_local_versions()
