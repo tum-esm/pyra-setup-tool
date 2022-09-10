@@ -1,7 +1,8 @@
 import json
+from typing import Any
 
 
-def run(from_dict: dict, from_version: str) -> tuple[dict, str]:
+def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
     if from_version == "4.0.4":
         to_version = "4.0.5"
     elif from_version == "4.0.5":

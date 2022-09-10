@@ -21,3 +21,14 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 95
+
+[tool.mypy]
+strict = true
+implicit_reexport = true
+no_warn_unused_ignores = true
+
+[[tool.mypy.overrides]]
+module = [
+    "colorama.*",
+]
+ignore_missing_imports = true
