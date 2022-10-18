@@ -3,11 +3,12 @@ from typing import Any
 
 
 def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
-    if from_version == "4.0.4":
-        to_version = "4.0.5"
-    elif from_version == "4.0.5":
-        to_version = "4.0.6"
-    else:
+    try:
+        to_version = {
+            "4.0.4": "4.0.5",
+            "4.0.5": "4.0.6",
+        }[from_version]
+    except KeyError:
         raise Exception(f'Unknown version "{from_version}"')
 
     to_dict = json.loads(json.dumps(from_dict))
