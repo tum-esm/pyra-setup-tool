@@ -1,9 +1,10 @@
 import subprocess
-from typing import Optional
 import os
+from os.path import dirname
 
+PROJECT_DIR = dirname(dirname(dirname(os.path.abspath(__file__))))
 
-def run_shell_command(command: str, cwd: Optional[str] = None, silent: bool = True) -> str:
+def run_shell_command(command: str, cwd: str = PROJECT_DIR, silent: bool = True) -> str:
     print(
         f'Running command "{command}"' + (f'" in directory {cwd}"' if cwd is not None else "")
     )
