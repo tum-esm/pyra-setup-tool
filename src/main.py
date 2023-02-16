@@ -1,4 +1,5 @@
 import sys
+from typing import Literal
 
 try:
     import colorama
@@ -15,6 +16,7 @@ from src.routines import (
     manage_local_files,
 )
 from src.utils import directory_utils, printing_utils
+from src import procedures
 
 
 def run() -> None:
@@ -59,9 +61,11 @@ def run() -> None:
         # Infinite loop (waiting for new command -> execute command -> ...)
         while True:
             printing_utils.print_line()
-            command = printing_utils.pretty_input(
+            command: Literal[
+                "help", "status", "upgrade", "remove", "exit"
+            ] = printing_utils.pretty_input(
                 "Enter a command",
-                ["help", "status", "install", "remove", "exit"],
+                ["help", "status", "upgrade", "remove", "exit"],
             )
 
             if command == "help":
@@ -70,7 +74,7 @@ def run() -> None:
                 print("    * list available release version")
                 print("    * show, if pyra-cli command is installed in environment path")
                 print("    * show which pyra version the cli-command currently uses")
-                print("install:")
+                print("upgrade:")
                 print("    * choose an available release version")
                 print("    * download code from github")
                 print("    * install dependencies")
@@ -107,46 +111,8 @@ def run() -> None:
                 else:
                     printing_utils.pretty_print("undefined", color="red")
 
-            elif command == "install":
-                local_pyra_versions = find_versions.get_local_versions()
-                remote_pyra_versions = find_versions.get_remote_versions()
-                if len(remote_pyra_versions) == 0:
-                    print("Did not find any remote pyra versions.")
-                    continue
-                version_to_be_installed = printing_utils.pretty_input(
-                    f"Which version should be installed?", remote_pyra_versions
-                )
-                if version_to_be_installed not in remote_pyra_versions:
-                    printing_utils.pretty_print(f'Invalid version "{version_to_be_installed}"')
-                    continue
-                if version_to_be_installed in local_pyra_versions:
-                    printing_utils.pretty_print(
-                        f'Please uninstall the local "{version_to_be_installed}" first'
-                    )
-                    continue
-
-                manage_local_files.download_version(version_to_be_installed)
-                installation.install_version(version_to_be_installed)
-
-                available_versions_to_migrate_from = (
-                    find_versions.get_versions_to_migrate_from(version_to_be_installed)
-                )
-                if len(available_versions_to_migrate_from) == 0:
-                    print("Skipping migration, no available versions to migrate from")
-                else:
-                    version_to_migrate_from = printing_utils.pretty_input(
-                        f"Should we reuse the config.json from a previously installed version?",
-                        [
-                            "no",
-                            *available_versions_to_migrate_from,
-                        ],
-                    )
-                    if version_to_migrate_from != "no":
-                        installation.migrate_config(
-                            version_to_migrate_from, version_to_be_installed
-                        )
-
-                printing_utils.pretty_print("done!", color="green")
+            elif command == "upgrade":
+                procedures.upgrade.run()
 
             elif command == "remove":
                 local_pyra_versions = find_versions.get_local_versions()
