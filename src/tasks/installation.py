@@ -47,7 +47,8 @@ def _update_pyra_cli_pointer(pyra_dir: str, version: str) -> None:
 
 
 def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
-    if pyra_cli_in_env_path():
+    env_paths = shell_utils.run_shell_command(f"echo %PATH%").split(";")
+    if pyra_dir in env_paths:
         printing_utils.pretty_print(
             '"pyra-cli" command already in user environment variables', color="green"
         )
@@ -141,9 +142,3 @@ def remove_version(version: str) -> None:
 
     if os.path.isfile(ui_installer_path):
         os.remove(ui_installer_path)
-
-
-def pyra_cli_in_env_path() -> bool:
-    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-    env_paths = shell_utils.run_shell_command(f"echo %PATH%").split(";")
-    return pyra_dir in env_paths
