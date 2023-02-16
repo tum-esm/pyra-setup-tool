@@ -1,1 +1,1 @@
-from . import status, upgrade, remove, downgrade
+from . import status, upgrade, rollback, remove

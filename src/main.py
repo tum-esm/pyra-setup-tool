@@ -1,5 +1,4 @@
 import sys
-from typing import Literal
 
 try:
     import colorama
@@ -57,16 +56,16 @@ def run() -> None:
             printing_utils.print_line()
             command = printing_utils.pretty_input(
                 "Enter a command",
-                ["help", "status", "upgrade", "downgrade", "remove", "exit"],
+                ["help", "status", "upgrade", "rollback", "remove", "exit"],
             )
 
             if command == "help":
-                print("status:")
+                print("status: check the installation status")
                 print("    * list locally install versions")
                 print("    * list available release version")
                 print("    * show, if pyra-cli command is installed in environment path")
                 print("    * show which pyra version the cli-command currently uses")
-                print("upgrade:")
+                print("upgrade: install a new version from GitHub")
                 print("    * choose an available release version")
                 print("    * download code from github")
                 print("    * install dependencies")
@@ -75,13 +74,12 @@ def run() -> None:
                 print("    * test if pyra-cli command is installed in environment path")
                 print("    * add desktop-shortcut to code directory")
                 print("    * migrate config from an older version")
-                print("downgrade:")
-                print("    * run the installer for an old UI version")
+                print("rollback: (use an old local version again)")
+                print("    * run the installer for an already existing UI version")
                 print("    * set the pyra-cli to point to the new version")
                 print("    * test if pyra-cli command is installed in environment path")
                 print("    * add desktop-shortcut to code directory")
-                print("remove:")
-                print("    * remove a local version")
+                print("remove: remove a locally installed version")
 
             if command == "status":
                 commands.status.run()
@@ -89,8 +87,8 @@ def run() -> None:
             elif command == "upgrade":
                 commands.upgrade.run()
 
-            elif command == "downgrade":
-                commands.downgrade.run()
+            elif command == "rollback":
+                commands.rollback.run()
 
             elif command == "remove":
                 commands.remove.run()
