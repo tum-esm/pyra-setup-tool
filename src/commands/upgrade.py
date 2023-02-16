@@ -22,22 +22,14 @@ def run() -> None:
         return
 
     tasks.manage_local_files.download_version(version_to_be_installed)
-    tasks.installation.install_version(version_to_be_installed)
+    tasks.installation.perform_upgrade(version_to_be_installed)
 
+    # migrate the config.json between version
     available_versions_to_migrate_from = tasks.find_versions.get_versions_to_migrate_from(
         version_to_be_installed
     )
-    if len(available_versions_to_migrate_from) == 0:
-        print("Skipping migration, no available versions to migrate from")
-    else:
-        version_to_migrate_from = utils.printing_utils.pretty_input(
-            f"Should we reuse the config.json from a previously installed version?",
-            [
-                "no",
-                *available_versions_to_migrate_from,
-            ],
-        )
-        if version_to_migrate_from != "no":
-            tasks.installation.migrate_config(version_to_migrate_from, version_to_be_installed)
+    tasks.installation.perform_migration(
+        available_versions_to_migrate_from, version_to_be_installed
+    )
 
     utils.printing_utils.pretty_print("done!", color="green")

@@ -79,7 +79,7 @@ def _add_vscode_desktop_shortcut(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print("Created desktop shortcut to code directory", color="green")
 
 
-def install_version(version: str) -> None:
+def perform_upgrade(version: str) -> None:
     """
     For a given release version "x.y.z", install
     the code and its ui-installer.
@@ -97,7 +97,22 @@ def install_version(version: str) -> None:
     _add_vscode_desktop_shortcut(pyra_dir, version)
 
 
-def migrate_config(from_version: str, to_version: str) -> None:
+def perform_migration(available_versions_to_migrate_from: list[str], version: str) -> None:
+    if len(available_versions_to_migrate_from) == 0:
+        print("Skipping migration, no available versions to migrate from")
+    else:
+        version_to_migrate_from = printing_utils.pretty_input(
+            f"Should we reuse the config.json from a previously installed version?",
+            [
+                "no",
+                *available_versions_to_migrate_from,
+            ],
+        )
+        if version_to_migrate_from != "no":
+            _migrate_config(version_to_migrate_from, version)
+
+
+def _migrate_config(from_version: str, to_version: str) -> None:
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
     src_path = os.path.join(pyra_dir, f"pyra-{from_version}", "config", "config.json")
     dst_path = os.path.join(pyra_dir, f"pyra-{to_version}", "config", "config.json")

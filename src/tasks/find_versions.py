@@ -1,4 +1,3 @@
-from genericpath import isfile
 import os
 import re
 from typing import Optional
