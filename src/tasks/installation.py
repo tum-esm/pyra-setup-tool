@@ -46,9 +46,14 @@ def _update_pyra_cli_pointer(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
 
-def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
+def pyra_dir_is_in_env_path() -> bool:
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
     env_paths = shell_utils.run_shell_command(f"echo %PATH%").split(";")
-    if pyra_dir in env_paths:
+    return pyra_dir in env_paths
+
+
+def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
+    if pyra_dir_is_in_env_path():
         printing_utils.pretty_print(
             '"pyra-cli" command already in user environment variables', color="green"
         )

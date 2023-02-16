@@ -55,9 +55,7 @@ def run() -> None:
         # Infinite loop (waiting for new command -> execute command -> ...)
         while True:
             printing_utils.print_line()
-            command: Literal[
-                "help", "status", "upgrade", "downgrade", "remove", "exit"
-            ] = printing_utils.pretty_input(
+            command = printing_utils.pretty_input(
                 "Enter a command",
                 ["help", "status", "upgrade", "downgrade", "remove", "exit"],
             )
