@@ -79,24 +79,6 @@ def _add_vscode_desktop_shortcut(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print("Created desktop shortcut to code directory", color="green")
 
 
-def perform_upgrade(version: str) -> None:
-    """
-    For a given release version "x.y.z", install
-    the code and its ui-installer.
-    """
-    if sys.platform not in ["win32", "cygwin"]:
-        print("Skipping installation on non-windows-platforms")
-        return
-
-    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-
-    _install_python_dependencies(pyra_dir, version)
-    _run_ui_installer(pyra_dir, version)
-    _update_pyra_cli_pointer(pyra_dir, version)
-    _add_pyra_cli_to_env_path(pyra_dir)
-    _add_vscode_desktop_shortcut(pyra_dir, version)
-
-
 def perform_migration(available_versions_to_migrate_from: list[str], version: str) -> None:
     if len(available_versions_to_migrate_from) == 0:
         print("Skipping migration, no available versions to migrate from")
@@ -110,6 +92,28 @@ def perform_migration(available_versions_to_migrate_from: list[str], version: st
         )
         if version_to_migrate_from != "no":
             _migrate_config(version_to_migrate_from, version)
+
+
+def switch_to_pyra_version(version: str) -> None:
+    """
+    For a given release version "x.y.z" installed locally, switch to that version:
+    1. install python dependencies
+    2. run UI installer
+    3. update pyra-cli pointer
+    4. check whether pyra-cli is in env paths
+    5. create VS Code desktop shortcut to code directory
+    """
+    if sys.platform not in ["win32", "cygwin"]:
+        print("Skipping installation on non-windows-platforms")
+        return
+
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
+
+    _install_python_dependencies(pyra_dir, version)
+    _run_ui_installer(pyra_dir, version)
+    _update_pyra_cli_pointer(pyra_dir, version)
+    _add_pyra_cli_to_env_path(pyra_dir)
+    _add_vscode_desktop_shortcut(pyra_dir, version)
 
 
 def _migrate_config(from_version: str, to_version: str) -> None:

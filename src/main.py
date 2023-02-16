@@ -56,10 +56,10 @@ def run() -> None:
         while True:
             printing_utils.print_line()
             command: Literal[
-                "help", "status", "upgrade", "remove", "exit"
+                "help", "status", "upgrade", "downgrade", "remove", "exit"
             ] = printing_utils.pretty_input(
                 "Enter a command",
-                ["help", "status", "upgrade", "remove", "exit"],
+                ["help", "status", "upgrade", "downgrade", "remove", "exit"],
             )
 
             if command == "help":
@@ -77,12 +77,23 @@ def run() -> None:
                 print("    * test if pyra-cli command is installed in environment path")
                 print("    * add desktop-shortcut to code directory")
                 print("    * migrate config from an older version")
+                print("downgrade:")
+                print("    * run the installer for an old UI version")
+                print("    * set the pyra-cli to point to the new version")
+                print("    * test if pyra-cli command is installed in environment path")
+                print("    * add desktop-shortcut to code directory")
                 print("remove:")
                 print("    * remove a local version")
+
             if command == "status":
                 commands.status.run()
+
             elif command == "upgrade":
                 commands.upgrade.run()
+
+            elif command == "downgrade":
+                commands.downgrade.run()
+
             elif command == "remove":
                 commands.remove.run()
 
