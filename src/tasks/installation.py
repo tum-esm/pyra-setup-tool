@@ -6,7 +6,9 @@ import sys
 from src.utils import directory_utils, migration_utils, printing_utils, shell_utils
 
 
-def _install_python_dependencies(code_dir: str) -> None:
+def _install_python_dependencies(pyra_dir: str, version: str) -> None:
+    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+
     """install system dependencies with poetry"""
     for command in [
         "poetry config virtualenvs.create false",
@@ -33,7 +35,9 @@ def _run_ui_installer(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print("Installed the UI", color="green")
 
 
-def _update_pyra_cli_pointer(pyra_dir: str, code_dir: str) -> None:
+def _update_pyra_cli_pointer(pyra_dir: str, version: str) -> None:
+    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+
     with open(os.path.join(pyra_dir, f"pyra-cli.bat"), "w") as f:
         pyra_cli_path = os.path.join(code_dir, "packages", "cli", "main.py")
         f.write("@echo off\n")
@@ -55,7 +59,10 @@ def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
         )
 
 
-def _add_vscode_desktop_shortcut(desktop_dir: str, version: str, code_dir: str) -> None:
+def _add_vscode_desktop_shortcut(pyra_dir: str, version: str) -> None:
+    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+    desktop_dir = directory_utils.get_desktop_dir()
+
     # Remove all old directory shortcuts
     p = re.compile("^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
     old_shortcuts = [s for s in os.listdir(desktop_dir) if p.match(s) is not None]
@@ -76,19 +83,17 @@ def install_version(version: str) -> None:
     For a given release version "x.y.z", install
     the code and its ui-installer.
     """
-    desktop_dir = directory_utils.get_desktop_dir()
-    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
-
     if sys.platform not in ["win32", "cygwin"]:
         print("Skipping installation on non-windows-platforms")
         return
 
-    _install_python_dependencies(code_dir)
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
+
+    _install_python_dependencies(pyra_dir, version)
     _run_ui_installer(pyra_dir, version)
-    _update_pyra_cli_pointer(pyra_dir, code_dir)
+    _update_pyra_cli_pointer(pyra_dir, version)
     _add_pyra_cli_to_env_path(pyra_dir)
-    _add_vscode_desktop_shortcut(desktop_dir, version, pyra_dir)
+    _add_vscode_desktop_shortcut(pyra_dir, version)
 
 
 def migrate_config(from_version: str, to_version: str) -> None:
