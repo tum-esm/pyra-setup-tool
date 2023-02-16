@@ -6,20 +6,8 @@ import sys
 from src.utils import directory_utils, migration_utils, printing_utils, shell_utils
 
 
-def install_version(version: str) -> None:
-    """
-    For a given release version "x.y.z", install
-    the code and its ui-installer.
-    """
-    desktop_dir = directory_utils.get_desktop_dir()
-    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
-
-    if sys.platform not in ["win32", "cygwin"]:
-        print("Skipping installation on non-windows-platforms")
-        return
-
-    # Install system dependencies with poetry
+def _install_python_dependencies(code_dir: str) -> None:
+    """install system dependencies with poetry"""
     for command in [
         "poetry config virtualenvs.create false",
         "poetry env use system",
@@ -28,7 +16,8 @@ def install_version(version: str) -> None:
         shell_utils.run_shell_command(command, cwd=code_dir, silent=False)
     printing_utils.pretty_print("Installed code dependencies", color="green")
 
-    # Run UI installer
+
+def _run_ui_installer(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print(
         "Please install the UI using the installer that opens now", color="yellow"
     )
@@ -43,7 +32,8 @@ def install_version(version: str) -> None:
 
     printing_utils.pretty_print("Installed the UI", color="green")
 
-    # Update "pyra-cli.bat" file
+
+def _update_pyra_cli_pointer(pyra_dir: str, code_dir: str) -> None:
     with open(os.path.join(pyra_dir, f"pyra-cli.bat"), "w") as f:
         pyra_cli_path = os.path.join(code_dir, "packages", "cli", "main.py")
         f.write("@echo off\n")
@@ -51,7 +41,8 @@ def install_version(version: str) -> None:
         f.write(f"python {pyra_cli_path} %*")
     printing_utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
-    # Add "pyra-cli" to user environment variables
+
+def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
     if pyra_cli_in_env_path():
         printing_utils.pretty_print(
             '"pyra-cli" command already in user environment variables', color="green"
@@ -63,6 +54,8 @@ def install_version(version: str) -> None:
             ["ok"],
         )
 
+
+def _add_vscode_desktop_shortcut(desktop_dir: str, version: str, code_dir: str) -> None:
     # Remove all old directory shortcuts
     p = re.compile("^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
     old_shortcuts = [s for s in os.listdir(desktop_dir) if p.match(s) is not None]
@@ -76,6 +69,26 @@ def install_version(version: str) -> None:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
     printing_utils.pretty_print("Created desktop shortcut to code directory", color="green")
+
+
+def install_version(version: str) -> None:
+    """
+    For a given release version "x.y.z", install
+    the code and its ui-installer.
+    """
+    desktop_dir = directory_utils.get_desktop_dir()
+    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
+    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+
+    if sys.platform not in ["win32", "cygwin"]:
+        print("Skipping installation on non-windows-platforms")
+        return
+
+    _install_python_dependencies(code_dir)
+    _run_ui_installer(pyra_dir, version)
+    _update_pyra_cli_pointer(pyra_dir, code_dir)
+    _add_pyra_cli_to_env_path(pyra_dir)
+    _add_vscode_desktop_shortcut(desktop_dir, version, pyra_dir)
 
 
 def migrate_config(from_version: str, to_version: str) -> None:
