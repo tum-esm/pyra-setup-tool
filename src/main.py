@@ -9,14 +9,14 @@ except ImportError:
 
 colorama.init()
 
-from src.routines import (
+from src.tasks import (
     check_software_dependencies,
     find_versions,
     installation,
     manage_local_files,
 )
 from src.utils import directory_utils, printing_utils
-from src import procedures
+from src import commands
 
 
 def run() -> None:
@@ -112,7 +112,7 @@ def run() -> None:
                     printing_utils.pretty_print("undefined", color="red")
 
             elif command == "upgrade":
-                procedures.upgrade.run()
+                commands.upgrade.run()
 
             elif command == "remove":
                 local_pyra_versions = find_versions.get_local_versions()
