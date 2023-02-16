@@ -9,14 +9,8 @@ except ImportError:
 
 colorama.init()
 
-from src.tasks import (
-    check_software_dependencies,
-    find_versions,
-    installation,
-    manage_local_files,
-)
 from src.utils import directory_utils, printing_utils
-from src import commands
+from src import commands, tasks
 
 
 def run() -> None:
@@ -42,12 +36,12 @@ def run() -> None:
             printing_utils.pretty_print("Aborting", color="red")
             return
 
-        check_software_dependencies.check_python_version()
-        check_software_dependencies.check_command_availability("poetry")
-        check_software_dependencies.check_command_availability("tar")
-        check_software_dependencies.check_command_availability("git")
-        check_software_dependencies.check_command_availability("gh", name="github cli")
-        check_software_dependencies.check_setup_tool_version()
+        tasks.check_software_dependencies.check_python_version()
+        tasks.check_software_dependencies.check_command_availability("poetry")
+        tasks.check_software_dependencies.check_command_availability("tar")
+        tasks.check_software_dependencies.check_command_availability("git")
+        tasks.check_software_dependencies.check_command_availability("gh", name="github cli")
+        tasks.check_software_dependencies.check_setup_tool_version()
 
         pyra_directory = directory_utils.initialize_pyra_directories()
         printing_utils.pretty_print(
@@ -89,21 +83,8 @@ def run() -> None:
                 commands.status.run()
             elif command == "upgrade":
                 commands.upgrade.run()
-
             elif command == "remove":
-                local_pyra_versions = find_versions.get_local_versions()
-                if len(local_pyra_versions) == 0:
-                    print("Did not find any local pyra versions.")
-                    continue
-                version_to_be_removed = printing_utils.pretty_input(
-                    f"Which version should be removed?", local_pyra_versions
-                )
-                if version_to_be_removed not in local_pyra_versions:
-                    printing_utils.pretty_print(f'Invalid version "{version_to_be_removed}"')
-                    continue
-
-                manage_local_files.remove_version(version_to_be_removed)
-                printing_utils.pretty_print("done!", color="green")
+                commands.remove.run()
 
             elif command == "exit":
                 print("Exiting program")
