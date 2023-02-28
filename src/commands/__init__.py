@@ -1,1 +1,1 @@
-from . import status, upgrade, rollback, remove
+from . import install, status, rollback, remove

@@ -56,7 +56,7 @@ def run() -> None:
             printing_utils.print_line()
             command = printing_utils.pretty_input(
                 "Enter a command",
-                ["help", "status", "upgrade", "rollback", "remove", "exit"],
+                ["help", "status", "install", "rollback", "remove", "exit"],
             )
 
             if command == "help":
@@ -65,7 +65,7 @@ def run() -> None:
                 print("    * list available release version")
                 print("    * show, if pyra-cli command is installed in environment path")
                 print("    * show which pyra version the cli-command currently uses")
-                print("upgrade: install a new version from GitHub")
+                print("install: install a new version from GitHub")
                 print("    * choose an available release version")
                 print("    * download code from github")
                 print("    * install dependencies")
@@ -84,8 +84,8 @@ def run() -> None:
             if command == "status":
                 commands.status.run()
 
-            elif command == "upgrade":
-                commands.upgrade.run()
+            elif command == "install":
+                commands.install.run()
 
             elif command == "rollback":
                 commands.rollback.run()
