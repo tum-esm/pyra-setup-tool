@@ -1,6 +1,7 @@
+import json
 import os
 import re
-from typing import Optional
+from typing import Any, Optional
 from src.utils import shell_utils, directory_utils, version_utils
 
 
@@ -24,18 +25,26 @@ def get_local_versions() -> list[str]:
 
 
 def get_remote_versions() -> list[str]:
-    """
-    Returns a list ["4.0.1", "4.0.2", ...] of pyra versions available
-    on GitHub. Only considers versions starting from 4.0.5 since these
-    are official release versions (not alphas or betas).
-    """
-    result = shell_utils.run_shell_command("gh release list --repo tum-esm/pyra")
-    releases = [
-        r.replace("\t", " ").split(" ")[0][1:]
-        for r in result.split("\n")
-        if ((r != "") and (version_utils.version_difference("4.0.4", r[1:6]) == 1))
+    """Returns a list ["4.0.1", "4.0.2", ...] of Pyra versions available
+    on GitHub. Only considers version that are not prereleases."""
+
+    releases: list[Any] = json.loads(
+        shell_utils.run_shell_command(
+            f"curl --request GET "
+            + f'--url "https://api.github.com/repos/tum-esm/pyra/releases" '
+            + f'--header "Accept: application/vnd.github+json" ',
+            +f'--header "X-GitHub-Api-Version: 2022-11-28" ',
+        )
+    )
+    release_name_pattern = re.compile(r"^v\d+\.\d+\.\d+$")
+    return [
+        release["name"][1:]
+        for release in releases
+        if (
+            (release_name_pattern.match(release["name"]) is not None)
+            and (not release["prerelease"])
+        )
     ]
-    return releases
 
 
 def get_versions_to_migrate_from(migration_target_version: str) -> list[str]:
