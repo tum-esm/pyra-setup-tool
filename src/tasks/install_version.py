@@ -96,7 +96,7 @@ def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: Version) -> None:
     desktop_dir = utils.get_desktop_dir()
 
     # Remove all old directory shortcuts
-    p = re.compile("^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
+    p = re.compile(r"^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
     old_shortcuts = [s for s in os.listdir(desktop_dir) if p.match(s) is not None]
     for s in old_shortcuts:
         os.remove(os.path.join(desktop_dir, s))

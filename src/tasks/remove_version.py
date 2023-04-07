@@ -4,7 +4,8 @@ from src import Version, utils
 
 
 def remove_version(version: Version) -> None:
-    """For a given release version "x.y.z", remove the code and its ui-installer."""
+    """For a given release version "x.y.z", remove the code
+    and its ui-installer."""
 
     pyra_dir = os.path.join(utils.directory_utils.get_documents_dir(), "pyra")
     ui_installer_path = os.path.join(

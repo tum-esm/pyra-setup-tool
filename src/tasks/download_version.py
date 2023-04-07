@@ -3,8 +3,8 @@ from src import Version, utils
 
 
 def download_version(version: Version) -> None:
-    """For a given release version "x.y.z", download
-    the code and its ui-installer."""
+    """For a given release version "x.y.z", download the code
+    and its UI installer."""
 
     pyra_dir = os.path.join(utils.directory_utils.get_documents_dir(), "pyra")
 
