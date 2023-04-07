@@ -21,7 +21,7 @@ def run() -> None:
         utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_used}"')
         return
 
-    tasks.installation.switch_to_pyra_version(version_to_be_used)
+    tasks.install_version.install_version(version_to_be_used)
     print("No migration, on rollbacks")
 
     utils.shell_utils.pretty_print("done!", color="green")

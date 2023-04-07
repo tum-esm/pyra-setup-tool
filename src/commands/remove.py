@@ -17,5 +17,5 @@ def run() -> None:
         utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_removed}"')
         return
 
-    tasks.manage_local_files.remove_version(version_to_be_removed)
+    tasks.remove_version.remove_version(version_to_be_removed)
     utils.shell_utils.pretty_print("done!", color="green")

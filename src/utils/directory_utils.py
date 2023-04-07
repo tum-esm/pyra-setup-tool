@@ -1,6 +1,8 @@
 import os
 import sys
 
+from .shell_utils import run_shell_command
+
 
 def get_documents_dir() -> str:
     """
@@ -75,3 +77,11 @@ def initialize_pyra_directories() -> str:
         print(f"Created directory '{ui_installers_directory}'")
 
     return pyra_directory
+
+
+def pyra_dir_is_in_env_path() -> bool:
+    """Checks if the pyra directory is in the environment's PATH variable."""
+
+    pyra_dir = os.path.join(get_documents_dir(), "pyra")
+    env_paths = run_shell_command(f"echo %PATH%").split(";")
+    return pyra_dir in env_paths
