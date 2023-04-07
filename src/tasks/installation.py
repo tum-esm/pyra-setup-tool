@@ -1,13 +1,13 @@
 import json
 import os
 import re
-import shutil
 import sys
+from src import Version
 from src.utils import directory_utils, migration_utils, printing_utils, shell_utils
 
 
-def _install_python_dependencies(pyra_dir: str, version: str) -> None:
-    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
+    code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
 
     """install system dependencies with poetry"""
     for command in [
@@ -19,7 +19,7 @@ def _install_python_dependencies(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print("Installed code dependencies", color="green")
 
 
-def _run_ui_installer(pyra_dir: str, version: str) -> None:
+def _run_ui_installer(pyra_dir: str, version: Version) -> None:
     """Runs the UI installer (`.msi`) which opens another window the user
     has to click through."""
 
@@ -27,7 +27,7 @@ def _run_ui_installer(pyra_dir: str, version: str) -> None:
         "Please install the UI using the installer that opens now", color="yellow"
     )
     ui_installer_path = os.path.join(
-        pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"
+        pyra_dir, "ui-installers", f"Pyra.UI_{version.as_str()}_x64_en-US.msi"
     )
     try:
         shell_utils.run_shell_command(f"msiexec /i {ui_installer_path} /qf")
@@ -38,10 +38,10 @@ def _run_ui_installer(pyra_dir: str, version: str) -> None:
     printing_utils.pretty_print("Installed the UI", color="green")
 
 
-def _update_pyra_cli_pointer(pyra_dir: str, version: str) -> None:
+def _update_pyra_cli_pointer(pyra_dir: str, version: Version) -> None:
     """Updates the pyra-cli.bat file to point to the new version of the CLI."""
 
-    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+    code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
 
     with open(os.path.join(pyra_dir, f"pyra-cli.bat"), "w") as f:
         pyra_cli_path = os.path.join(code_dir, "packages", "cli", "main.py")
@@ -75,10 +75,10 @@ def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
         )
 
 
-def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: str) -> None:
+def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: Version) -> None:
     """Adds a desktop shortcut to open the pyra dir in the file explorer."""
 
-    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
+    code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
     desktop_dir = directory_utils.get_desktop_dir()
 
     # Remove all old directory shortcuts
@@ -90,13 +90,17 @@ def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: str) -> None:
     # Create new shortcut for pyra-x.y.z directory. I used a ".bat"
     # script for this instead of a "windows shortcut" because the
     # latter are too much effort to create or require a python library
-    with open(os.path.join(desktop_dir, f"open-pyra-{version}-directory.bat"), "w") as f:
+    with open(
+        os.path.join(desktop_dir, f"open-pyra-{version.as_str()}-directory.bat"), "w"
+    ) as f:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
     printing_utils.pretty_print("Created desktop shortcut to code directory", color="green")
 
 
-def perform_migration(available_versions_to_migrate_from: list[str], version: str) -> None:
+def perform_migration(
+    available_versions_to_migrate_from: list[Version], version: Version
+) -> None:
     """Migrate the config.json from a previously installed version to the current version."""
 
     if len(available_versions_to_migrate_from) == 0:
@@ -106,14 +110,14 @@ def perform_migration(available_versions_to_migrate_from: list[str], version: st
             f"Should we reuse the config.json from a previously installed version?",
             [
                 "no",
-                *available_versions_to_migrate_from,
+                *[v.as_str() for v in available_versions_to_migrate_from],
             ],
         )
         if version_to_migrate_from != "no":
-            _migrate_config(version_to_migrate_from, version)
+            _migrate_config(Version(version_to_migrate_from), version)
 
 
-def switch_to_pyra_version(version: str) -> None:
+def switch_to_pyra_version(version: Version) -> None:
     """For a given release version "x.y.z" installed locally, switch to that version.
 
     This includes
@@ -137,10 +141,10 @@ def switch_to_pyra_version(version: str) -> None:
     _add_pyra_dir_desktop_shortcut(pyra_dir, version)
 
 
-def _migrate_config(from_version: str, to_version: str) -> None:
+def _migrate_config(from_version: Version, to_version: Version) -> None:
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-    src_path = os.path.join(pyra_dir, f"pyra-{from_version}", "config", "config.json")
-    dst_path = os.path.join(pyra_dir, f"pyra-{to_version}", "config", "config.json")
+    src_path = os.path.join(pyra_dir, f"pyra-{from_version.as_str()}", "config", "config.json")
+    dst_path = os.path.join(pyra_dir, f"pyra-{to_version.as_str()}", "config", "config.json")
 
     try:
         with open(src_path, "r") as f:
@@ -164,19 +168,3 @@ def _migrate_config(from_version: str, to_version: str) -> None:
 
     with open(dst_path, "w") as f:
         json.dump(current_config, f)
-
-
-def remove_version(version: str) -> None:
-    """For a given release version "x.y.z", remove the code and its ui-installer."""
-
-    pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
-    ui_installer_path = os.path.join(
-        pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"
-    )
-    code_dir = os.path.join(pyra_dir, f"pyra-{version}")
-
-    if os.path.isdir(code_dir):
-        shutil.rmtree(code_dir)
-
-    if os.path.isfile(ui_installer_path):
-        os.remove(ui_installer_path)

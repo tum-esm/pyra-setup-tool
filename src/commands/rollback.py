@@ -1,4 +1,4 @@
-from src import utils, tasks
+from src import Version, utils, tasks
 
 
 def run() -> None:
@@ -11,8 +11,11 @@ def run() -> None:
     """
 
     local_pyra_versions = tasks.find_versions.get_local_versions()
-    version_to_be_used = utils.printing_utils.pretty_input(
-        f"Which version should be rolled back to?", local_pyra_versions
+    version_to_be_used = Version(
+        utils.printing_utils.pretty_input(
+            f"Which version should be rolled back to?",
+            [v.as_str() for v in local_pyra_versions],
+        )
     )
     if version_to_be_used not in local_pyra_versions:
         utils.printing_utils.pretty_print(f'Invalid version "{version_to_be_used}"')
