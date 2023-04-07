@@ -11,10 +11,14 @@ authors = [
 python = "^3.10"
 colorama = "^0.4.5"
 
+[tool.poetry.group.dev]
+optional = true
+
 [tool.poetry.group.dev.dependencies]
 black = "^22.6.0"
-mypy = "^0.971"
 pytest = "^7.2.2"
+mypy = "^1.2.0"
+pytest-cov = "^4.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

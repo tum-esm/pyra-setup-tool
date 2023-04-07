@@ -7,5 +7,5 @@ rm -rf .mypy_cache
 
 for file in "run.py" "tests/"; do
     echo "Running mypy on $file"
-    mypy "$file"
+    python -m mypy "$file"
 done
