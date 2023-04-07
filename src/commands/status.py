@@ -26,13 +26,13 @@ def run() -> None:
     pyra_cli_found_in_env_path = tasks.installation.pyra_dir_is_in_env_path()
     print("Pyra CLI found in environment PATH variable: ", end="")
     if pyra_cli_found_in_env_path:
-        utils.printing_utils.pretty_print("Yes", color="green")
+        utils.shell_utils.pretty_print("Yes", color="green")
     else:
-        utils.printing_utils.pretty_print("No", color="red")
+        utils.shell_utils.pretty_print("No", color="red")
 
     print("Pyra CLI is pointing to version: ", end="")
     cli_version = tasks.find_versions.get_version_used_in_cli()
     if cli_version is not None:
-        utils.printing_utils.pretty_print(cli_version.as_str(), color="green")
+        utils.shell_utils.pretty_print(cli_version.as_str(), color="green")
     else:
-        utils.printing_utils.pretty_print("undefined", color="red")
+        utils.shell_utils.pretty_print("undefined", color="red")

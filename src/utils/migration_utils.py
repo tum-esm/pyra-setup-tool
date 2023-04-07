@@ -4,7 +4,7 @@ from typing import Any
 from src import Version
 
 
-def run(from_dict: Any, from_version: Version) -> tuple[Any, Version]:
+def migrate_config(from_dict: Any, from_version: Version) -> tuple[Any, Version]:
     """Perform a config migration from one version to another.
 
     It accepts a config dict and a version string and returns

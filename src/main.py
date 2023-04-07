@@ -8,31 +8,30 @@ except ImportError:
 
 colorama.init()
 
-from src.utils import directory_utils, printing_utils
-from src import commands, tasks
+from src import utils, commands, tasks
 
 
 def run() -> None:
     try:
-        printing_utils.print_line()
-        printing_utils.pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")
-        printing_utils.pretty_print("  * checkpoints = green ", color="green")
-        printing_utils.pretty_print("  * expecting user input = yellow ", color="yellow")
-        printing_utils.print_line()
+        utils.print_line()
+        utils.pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")
+        utils.pretty_print("  * checkpoints = green ", color="green")
+        utils.pretty_print("  * expecting user input = yellow ", color="yellow")
+        utils.print_line()
 
         # The following check is necessary because I did not manage to de-
         # activate the current venv from within a subprocess/system call/etc.
-        printing_utils.pretty_print(
+        utils.pretty_print(
             "Please DO NOT use a virtual environment for PYRA! Use the"
             + " system interpreter available via the command 'python'. "
             + f"Currently using the interpreter '{sys.executable}'"
         )
-        if not printing_utils.pretty_input(
+        if not utils.pretty_input(
             f"Run 'which python' in another shell. Are system-"
             + "interpreter and the current one identical?",
             ["Y", "n"],
         ).startswith("Y"):
-            printing_utils.pretty_print("Aborting", color="red")
+            utils.pretty_print("Aborting", color="red")
             return
 
         tasks.check_software_dependencies.check_python_version()
@@ -42,8 +41,8 @@ def run() -> None:
         tasks.check_software_dependencies.check_command_availability("git")
         tasks.check_software_dependencies.check_setup_tool_version()
 
-        pyra_directory = directory_utils.initialize_pyra_directories()
-        printing_utils.pretty_print(
+        pyra_directory = utils.initialize_pyra_directories()
+        utils.pretty_print(
             f'Successfully initialized local environment inside "{pyra_directory}"',
             color="green",
         )
@@ -53,8 +52,8 @@ def run() -> None:
 
         # Infinite loop (waiting for new command -> execute command -> ...)
         while True:
-            printing_utils.print_line()
-            command = printing_utils.pretty_input(
+            utils.print_line()
+            command = utils.pretty_input(
                 "Enter a command",
                 ["help", "status", "install", "rollback", "remove", "exit"],
             )
@@ -98,10 +97,10 @@ def run() -> None:
                 return
 
             else:
-                printing_utils.pretty_print(f'Unknown command "{command}"', color="red")
+                utils.pretty_print(f'Unknown command "{command}"', color="red")
 
     except KeyboardInterrupt:
-        printing_utils.pretty_print("Exiting program")
+        utils.pretty_print("Exiting program")
     except Exception as e:
-        printing_utils.pretty_print("Exception occured!", color="red")
+        utils.pretty_print("Exception occured!", color="red")
         raise e

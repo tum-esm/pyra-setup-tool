@@ -1,6 +1,6 @@
 import sys
 from typing import Optional
-from src.utils import shell_utils, printing_utils
+from src import utils
 
 
 def check_python_version() -> None:
@@ -11,7 +11,7 @@ def check_python_version() -> None:
         "3.10."
     ), f"Please use Python 3.10.x (currently at {python_version})"
 
-    printing_utils.pretty_print(f"Python version {python_version} is supported", color="green")
+    utils.pretty_print(f"Python version {python_version} is supported", color="green")
 
 
 def check_command_availability(command: str, name: Optional[str] = None) -> None:
@@ -19,10 +19,10 @@ def check_command_availability(command: str, name: Optional[str] = None) -> None
 
     pretty_command_name = command if name is None else name
     try:
-        shell_utils.run_shell_command(f"{command} --version")
-        printing_utils.pretty_print(f"Found {pretty_command_name}!", color="green")
+        utils.run_shell_command(f"{command} --version")
+        utils.pretty_print(f"Found {pretty_command_name}!", color="green")
     except AssertionError as e:
-        printing_utils.pretty_print(
+        utils.pretty_print(
             f"Please make sure to have {pretty_command_name} installed.",
             color="red",
         )
@@ -37,12 +37,12 @@ def check_setup_tool_version() -> None:
     because the user needs to run the setup tool again in order
     to run the setup tool using the newest code."""
 
-    pull_stdout = shell_utils.run_shell_command("git pull")
+    pull_stdout = utils.run_shell_command("git pull")
     if pull_stdout == "Already up to date.":
-        printing_utils.pretty_print("Setup tool is up to date.", color="green")
+        utils.pretty_print("Setup tool is up to date.", color="green")
     else:
-        printing_utils.pretty_print("Updated the setup tool.")
-        printing_utils.pretty_print(
+        utils.pretty_print("Updated the setup tool.")
+        utils.pretty_print(
             f"Please run the setup tool again!",
             color="yellow",
         )

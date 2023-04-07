@@ -2,15 +2,14 @@ import json
 import os
 import re
 from typing import Any, Optional
-from src import Version
-from src.utils import shell_utils, directory_utils
+from src import Version, utils
 
 
 def get_local_versions() -> list[Version]:
     """Returns a list [Version("v4.0.4"), Version("v4.0.5"), ...] of Pyra
     versions installed locally."""
 
-    pyra_directory = os.path.join(directory_utils.get_documents_dir(), "pyra")
+    pyra_directory = os.path.join(utils.get_documents_dir(), "pyra")
     local_versions: list[Version] = []
     for d in os.listdir(pyra_directory):
         try:
@@ -29,7 +28,7 @@ def get_remote_versions() -> list[Version]:
     prereleases."""
 
     releases: list[Any] = json.loads(
-        shell_utils.run_shell_command(
+        utils.run_shell_command(
             f"curl --request GET "
             + f'--url "https://api.github.com/repos/tum-esm/pyra/releases" '
             + f'--header "Accept: application/vnd.github+json" '
@@ -48,7 +47,7 @@ def get_versions_to_migrate_from(migration_target_version: Version) -> list[Vers
     migration_target_version."""
 
     local_pyra_versions = get_local_versions()
-    documents_dir = directory_utils.get_documents_dir()
+    documents_dir = utils.get_documents_dir()
     return [
         v
         for v in local_pyra_versions
@@ -62,7 +61,7 @@ def get_versions_to_migrate_from(migration_target_version: Version) -> list[Vers
 
 
 def get_version_used_in_cli() -> Optional[Version]:
-    pyra_cli_bat = os.path.join(directory_utils.get_documents_dir(), "pyra", "pyra-cli.bat")
+    pyra_cli_bat = os.path.join(utils.get_documents_dir(), "pyra", "pyra-cli.bat")
 
     if not os.path.isfile(pyra_cli_bat):
         return None
