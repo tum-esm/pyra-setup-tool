@@ -5,5 +5,7 @@ set -o errexit
 echo "Removing old mypy cache"
 rm -rf .mypy_cache 
 
-echo "Checking run.py"
-mypy run.py
+for file in "run.py" "tests/"; do
+    echo "Running mypy on $file"
+    mypy "$file"
+done
