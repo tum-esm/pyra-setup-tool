@@ -31,8 +31,8 @@ def get_remote_versions() -> list[str]:
         shell_utils.run_shell_command(
             f"curl --request GET "
             + f'--url "https://api.github.com/repos/tum-esm/pyra/releases" '
-            + f'--header "Accept: application/vnd.github+json" ',
-            +f'--header "X-GitHub-Api-Version: 2022-11-28" ',
+            + f'--header "Accept: application/vnd.github+json" '
+            + f'--header "X-GitHub-Api-Version: 2022-11-28" '
         )
     )
     release_name_pattern = re.compile(r"^v\d+\.\d+\.\d+$")
