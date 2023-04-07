@@ -2,6 +2,16 @@ from src import utils, tasks
 
 
 def run() -> None:
+    """Installs a new version of Pyra.
+
+    This includes:
+    - fetching the remote pyra versions
+    - asking the user which version should be installed
+    - downloading the selected version
+    - switching to the selected version (install dependencies, switch CLI pointer)
+    - migrating the config.json between version
+    """
+
     local_pyra_versions = tasks.find_versions.get_local_versions()
     remote_pyra_versions = tasks.find_versions.get_remote_versions()
     if len(remote_pyra_versions) == 0:

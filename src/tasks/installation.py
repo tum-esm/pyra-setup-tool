@@ -20,6 +20,9 @@ def _install_python_dependencies(pyra_dir: str, version: str) -> None:
 
 
 def _run_ui_installer(pyra_dir: str, version: str) -> None:
+    """Runs the UI installer (`.msi`) which opens another window the user
+    has to click through."""
+
     printing_utils.pretty_print(
         "Please install the UI using the installer that opens now", color="yellow"
     )
@@ -36,6 +39,8 @@ def _run_ui_installer(pyra_dir: str, version: str) -> None:
 
 
 def _update_pyra_cli_pointer(pyra_dir: str, version: str) -> None:
+    """Updates the pyra-cli.bat file to point to the new version of the CLI."""
+
     code_dir = os.path.join(pyra_dir, f"pyra-{version}")
 
     with open(os.path.join(pyra_dir, f"pyra-cli.bat"), "w") as f:
@@ -47,12 +52,17 @@ def _update_pyra_cli_pointer(pyra_dir: str, version: str) -> None:
 
 
 def pyra_dir_is_in_env_path() -> bool:
+    """Checks if the pyra directory is in the environment's PATH variable."""
+
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
     env_paths = shell_utils.run_shell_command(f"echo %PATH%").split(";")
     return pyra_dir in env_paths
 
 
 def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
+    """Print instriuctions to add the pyra-cli command to the user
+    environment variables if it is not already there."""
+
     if pyra_dir_is_in_env_path():
         printing_utils.pretty_print(
             '"pyra-cli" command already in user environment variables', color="green"
@@ -65,7 +75,9 @@ def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
         )
 
 
-def _add_vscode_desktop_shortcut(pyra_dir: str, version: str) -> None:
+def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: str) -> None:
+    """Adds a desktop shortcut to open the pyra dir in the file explorer."""
+
     code_dir = os.path.join(pyra_dir, f"pyra-{version}")
     desktop_dir = directory_utils.get_desktop_dir()
 
@@ -85,6 +97,8 @@ def _add_vscode_desktop_shortcut(pyra_dir: str, version: str) -> None:
 
 
 def perform_migration(available_versions_to_migrate_from: list[str], version: str) -> None:
+    """Migrate the config.json from a previously installed version to the current version."""
+
     if len(available_versions_to_migrate_from) == 0:
         print("Skipping migration, no available versions to migrate from")
     else:
@@ -100,14 +114,16 @@ def perform_migration(available_versions_to_migrate_from: list[str], version: st
 
 
 def switch_to_pyra_version(version: str) -> None:
+    """For a given release version "x.y.z" installed locally, switch to that version.
+
+    This includes
+    * install python dependencies
+    * run UI installer
+    * update pyra-cli pointer
+    * check whether pyra-cli is in env paths
+    * create VS Code desktop shortcut to code directory
     """
-    For a given release version "x.y.z" installed locally, switch to that version:
-    1. install python dependencies
-    2. run UI installer
-    3. update pyra-cli pointer
-    4. check whether pyra-cli is in env paths
-    5. create VS Code desktop shortcut to code directory
-    """
+
     if sys.platform not in ["win32", "cygwin"]:
         print("Skipping installation on non-windows-platforms")
         return
@@ -118,7 +134,7 @@ def switch_to_pyra_version(version: str) -> None:
     _run_ui_installer(pyra_dir, version)
     _update_pyra_cli_pointer(pyra_dir, version)
     _add_pyra_cli_to_env_path(pyra_dir)
-    _add_vscode_desktop_shortcut(pyra_dir, version)
+    _add_pyra_dir_desktop_shortcut(pyra_dir, version)
 
 
 def _migrate_config(from_version: str, to_version: str) -> None:
@@ -151,10 +167,8 @@ def _migrate_config(from_version: str, to_version: str) -> None:
 
 
 def remove_version(version: str) -> None:
-    """
-    For a given release version "x.y.z", remove
-    the code and its ui-installer.
-    """
+    """For a given release version "x.y.z", remove the code and its ui-installer."""
+
     pyra_dir = os.path.join(directory_utils.get_documents_dir(), "pyra")
     ui_installer_path = os.path.join(
         pyra_dir, "ui-installers", f"Pyra.UI_{version}_x64_en-US.msi"

@@ -3,6 +3,14 @@ from typing import Any
 
 
 def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
+    """Perform a config migration from one version to another.
+
+    It accepts a config dict and a version string and returns
+    the next config dict and version string.
+
+    The migration works step by step, i.e. with `from_version`
+    4.0.4 it will return the config for version 4.0.5."""
+
     try:
         to_version = {
             "4.0.4": "4.0.5",
@@ -42,8 +50,7 @@ def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
 
     except Exception as e:
         raise Exception(
-            f"Could not perform config migration " +
-            f"{from_version} -> {to_version}: {e}"
+            f"Could not perform config migration " + f"{from_version} -> {to_version}: {e}"
         )
 
     return to_dict, to_version

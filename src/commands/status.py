@@ -2,6 +2,15 @@ from src import tasks, utils
 
 
 def run() -> None:
+    """Prints the status of the Pyra installation.
+
+    This includes:
+    - local pyra versions
+    - remote pyra versions
+    - whether the pyra-cli is in the environment PATH variable
+    - which pyra version the pyra-cli is pointing to
+    """
+
     local_pyra_versions = tasks.find_versions.get_local_versions()
     if len(local_pyra_versions) == 0:
         print("Did not find any local pyra versions.")

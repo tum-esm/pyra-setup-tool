@@ -4,10 +4,18 @@ from os.path import dirname
 
 PROJECT_DIR = dirname(dirname(dirname(os.path.abspath(__file__))))
 
-def run_shell_command(command: str, cwd: str = PROJECT_DIR, silent: bool = True) -> str:
-    print(
-        f'Running command "{command}"' + (f'" in directory {cwd}"' if cwd is not None else "")
-    )
+
+def run_shell_command(
+    command: str,
+    cwd: str = PROJECT_DIR,
+    silent: bool = True,
+) -> str:
+    """Runs a shell command and returns the stdout as a string.
+
+    The command is silent by default, meaning that it does not
+    print anything to the console."""
+
+    print(f'Running command "{command}" in directory "{cwd}"')
     if silent:
         p = subprocess.run(
             command,
@@ -16,10 +24,6 @@ def run_shell_command(command: str, cwd: str = PROJECT_DIR, silent: bool = True)
             stderr=subprocess.PIPE,
             cwd=cwd,
         )
-    else:
-        p = subprocess.run(command, shell=True, cwd=cwd)
-
-    if silent:
         try:
             stdout = p.stdout.decode("utf-8", errors="replace")
             stderr = p.stderr.decode("utf-8", errors="replace")
@@ -27,10 +31,11 @@ def run_shell_command(command: str, cwd: str = PROJECT_DIR, silent: bool = True)
             print(f"Error when decoding p: {p}")
             raise e
     else:
+        p = subprocess.run(command, shell=True, cwd=cwd)
         stdout = "null"
         stderr = "null"
 
-    assert p.returncode == 0, (
-        f"command '{command}' failed with exit code " + f"{p.returncode}: stderr = '{stderr}'"
-    )
+    assert (
+        p.returncode == 0
+    ), f"command '{command}' failed with exit code {p.returncode}: stderr = '{stderr}'"
     return stdout.strip()
