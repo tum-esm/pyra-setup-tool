@@ -37,9 +37,9 @@ def run() -> None:
 
         tasks.check_software_dependencies.check_python_version()
         tasks.check_software_dependencies.check_command_availability("poetry")
+        tasks.check_software_dependencies.check_command_availability("curl")
         tasks.check_software_dependencies.check_command_availability("tar")
         tasks.check_software_dependencies.check_command_availability("git")
-        tasks.check_software_dependencies.check_command_availability("gh", name="github cli")
         tasks.check_software_dependencies.check_setup_tool_version()
 
         pyra_directory = directory_utils.initialize_pyra_directories()
