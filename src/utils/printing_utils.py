@@ -2,6 +2,8 @@ import os
 from typing import Literal, Optional
 from colorama import Fore, Style
 
+from src import Version
+
 
 def pretty_print(
     text: str,

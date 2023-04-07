@@ -1,8 +1,10 @@
 import json
 from typing import Any
 
+from src import Version
 
-def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
+
+def run(from_dict: Any, from_version: Version) -> tuple[Any, Version]:
     """Perform a config migration from one version to another.
 
     It accepts a config dict and a version string and returns
@@ -13,9 +15,9 @@ def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
 
     try:
         to_version = {
-            "4.0.4": "4.0.5",
-            "4.0.5": "4.0.6",
-            "4.0.6": "4.0.7",
+            Version("v4.0.4"): Version("v4.0.5"),
+            Version("v4.0.5"): Version("v4.0.6"),
+            Version("v4.0.6"): Version("v4.0.7"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version}"')
@@ -23,9 +25,9 @@ def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
     to_dict = json.loads(json.dumps(from_dict))
 
     try:
-        to_dict["general"]["version"] = to_version
+        to_dict["general"]["version"] = to_version.as_str()
 
-        if to_version == "4.0.5":
+        if to_version == Version("v4.0.5"):
             to_dict["measurement_triggers"]["consider_helios"] = to_dict[
                 "measurement_triggers"
             ]["consider_vbdsd"]
@@ -39,10 +41,10 @@ def run(from_dict: Any, from_version: str) -> tuple[Any, str]:
 
             to_dict["upload"] = None
 
-        if to_version == "4.0.6":
+        if to_version == Version("v4.0.6"):
             pass
 
-        if to_version == "4.0.7":
+        if to_version == Version("v4.0.7"):
             if to_dict["helios"] is not None:
                 del to_dict["helios"]["measurement_threshold"]
 

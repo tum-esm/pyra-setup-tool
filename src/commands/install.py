@@ -1,4 +1,4 @@
-from src import utils, tasks
+from src import Version, utils, tasks
 
 
 def run() -> None:
@@ -18,8 +18,11 @@ def run() -> None:
         print("Did not find any remote pyra versions.")
         return
 
-    version_to_be_installed = utils.printing_utils.pretty_input(
-        f"Which version should be installed?", remote_pyra_versions
+    version_to_be_installed = Version(
+        utils.printing_utils.pretty_input(
+            f"Which version should be installed?",
+            [v.as_str() for v in remote_pyra_versions],
+        )
     )
     if version_to_be_installed not in remote_pyra_versions:
         utils.printing_utils.pretty_print(f'Invalid version "{version_to_be_installed}"')

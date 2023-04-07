@@ -1,4 +1,4 @@
-from src import tasks, utils
+from src import Version, tasks, utils
 
 
 def run() -> None:
@@ -8,8 +8,10 @@ def run() -> None:
     if len(local_pyra_versions) == 0:
         print("Did not find any local pyra versions.")
         return
-    version_to_be_removed = utils.printing_utils.pretty_input(
-        f"Which version should be removed?", local_pyra_versions
+    version_to_be_removed = Version(
+        utils.printing_utils.pretty_input(
+            f"Which version should be removed?", [v.as_str() for v in local_pyra_versions]
+        )
     )
     if version_to_be_removed not in local_pyra_versions:
         utils.printing_utils.pretty_print(f'Invalid version "{version_to_be_removed}"')

@@ -15,13 +15,13 @@ def run() -> None:
     if len(local_pyra_versions) == 0:
         print("Did not find any local pyra versions.")
     else:
-        print(f"Local pyra versions: {', '.join(local_pyra_versions)}")
+        print(f"Local pyra versions: {', '.join([v.as_str() for v in local_pyra_versions])}")
 
     remote_pyra_versions = tasks.find_versions.get_remote_versions()
     if len(remote_pyra_versions) == 0:
         print("Did not find any remote pyra versions.")
     else:
-        print(f"Remote pyra versions: {', '.join(remote_pyra_versions)}")
+        print(f"Remote pyra versions: {', '.join([v.as_str() for v in remote_pyra_versions])}")
 
     pyra_cli_found_in_env_path = tasks.installation.pyra_dir_is_in_env_path()
     print("Pyra CLI found in environment PATH variable: ", end="")
@@ -33,6 +33,6 @@ def run() -> None:
     print("Pyra CLI is pointing to version: ", end="")
     cli_version = tasks.find_versions.get_version_used_in_cli()
     if cli_version is not None:
-        utils.printing_utils.pretty_print(cli_version, color="green")
+        utils.printing_utils.pretty_print(cli_version.as_str(), color="green")
     else:
         utils.printing_utils.pretty_print("undefined", color="red")
