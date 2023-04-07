@@ -5,6 +5,10 @@ from typing import Literal
 version_pattern = re.compile("^\d+\.\d+\.\d+$")
 
 
+# this would be more elegent with a version class
+# but this is a quick and dirty solution
+
+
 def version_difference(a: str, b: str) -> Literal[-1, 0, 1]:
     """
     Input: two versions "x.y.z"

@@ -6,10 +6,9 @@ from src.utils import shell_utils, directory_utils, version_utils
 
 
 def get_local_versions() -> list[str]:
-    """
-    Returns a list ["4.0.4", "4.0.5", ...] of pyra versions installed
-    locally. Only considers version greater equal 4.0.4
-    """
+    """Returns a list ["4.0.4", "4.0.5", ...] of pyra versions installed
+    locally. Only considers version greater equal 4.0.4"""
+
     pyra_directory = os.path.join(directory_utils.get_documents_dir(), "pyra")
 
     folder_pattern = re.compile("^pyra\-\d+\.\d+\.\d+$")
@@ -48,6 +47,9 @@ def get_remote_versions() -> list[str]:
 
 
 def get_versions_to_migrate_from(migration_target_version: str) -> list[str]:
+    """Returns a list ["4.0.4", "4.0.5", ...] of Pyra versions that can be
+    used to migrate the config.json to the given migration_target_version."""
+
     local_pyra_versions = get_local_versions()
     documents_dir = directory_utils.get_documents_dir()
     return [

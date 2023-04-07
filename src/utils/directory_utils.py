@@ -51,14 +51,16 @@ def initialize_pyra_directories() -> str:
 
     The directories within which pyra will operate:
 
+    ```
     📁 <documents directory>
         📁 pyra
             📁 ui-installers
             📁 pyra-x.y.z
             📁 pyra-x.y.z
             📁 ...
+    ```
 
-    Returns the path to documents/pyra
+    Returns the path to `.../pyra`
     """
     documents_directory = get_documents_dir()
 

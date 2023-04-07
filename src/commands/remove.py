@@ -2,6 +2,8 @@ from src import tasks, utils
 
 
 def run() -> None:
+    """Removes a local version of Pyra."""
+
     local_pyra_versions = tasks.find_versions.get_local_versions()
     if len(local_pyra_versions) == 0:
         print("Did not find any local pyra versions.")
