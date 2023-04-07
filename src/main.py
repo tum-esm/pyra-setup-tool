@@ -34,12 +34,12 @@ def run() -> None:
             utils.pretty_print("Aborting", color="red")
             return
 
-        tasks.check_software_dependencies.check_python_version()
-        tasks.check_software_dependencies.check_command_availability("poetry")
-        tasks.check_software_dependencies.check_command_availability("curl")
-        tasks.check_software_dependencies.check_command_availability("tar")
-        tasks.check_software_dependencies.check_command_availability("git")
-        tasks.check_software_dependencies.check_setup_tool_version()
+        tasks.check_environment.check_python_version()
+        tasks.check_environment.check_command_availability("poetry")
+        tasks.check_environment.check_command_availability("curl")
+        tasks.check_environment.check_command_availability("tar")
+        tasks.check_environment.check_command_availability("git")
+        tasks.check_environment.check_setup_tool_version()
 
         pyra_directory = utils.initialize_pyra_directories()
         utils.pretty_print(
