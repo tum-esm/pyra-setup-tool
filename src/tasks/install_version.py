@@ -1,8 +1,31 @@
-import json
 import os
 import re
 import sys
 from src import Version, utils
+
+
+def install_version(version: Version) -> None:
+    """For a given release version "x.y.z" installed locally, switch to that version.
+
+    This includes
+    * install python dependencies
+    * run UI installer
+    * update pyra-cli pointer
+    * check whether pyra-cli is in env paths
+    * create VS Code desktop shortcut to code directory
+    """
+
+    if sys.platform not in ["win32", "cygwin"]:
+        print("Skipping installation on non-windows-platforms")
+        return
+
+    pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
+
+    _install_python_dependencies(pyra_dir, version)
+    _run_ui_installer(pyra_dir, version)
+    _update_pyra_cli_pointer(pyra_dir, version)
+    _add_pyra_cli_to_env_path(pyra_dir)
+    _add_pyra_dir_desktop_shortcut(pyra_dir, version)
 
 
 def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
@@ -50,19 +73,11 @@ def _update_pyra_cli_pointer(pyra_dir: str, version: Version) -> None:
     utils.pretty_print("Updated the link in pyra-cli.bat", color="green")
 
 
-def pyra_dir_is_in_env_path() -> bool:
-    """Checks if the pyra directory is in the environment's PATH variable."""
-
-    pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
-    env_paths = utils.run_shell_command(f"echo %PATH%").split(";")
-    return pyra_dir in env_paths
-
-
 def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
     """Print instriuctions to add the pyra-cli command to the user
     environment variables if it is not already there."""
 
-    if pyra_dir_is_in_env_path():
+    if utils.pyra_dir_is_in_env_path():
         utils.pretty_print(
             '"pyra-cli" command already in user environment variables', color="green"
         )
@@ -95,75 +110,3 @@ def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: Version) -> None:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
     utils.pretty_print("Created desktop shortcut to code directory", color="green")
-
-
-def perform_migration(
-    available_versions_to_migrate_from: list[Version], version: Version
-) -> None:
-    """Migrate the config.json from a previously installed version to the current version."""
-
-    if len(available_versions_to_migrate_from) == 0:
-        print("Skipping migration, no available versions to migrate from")
-    else:
-        version_to_migrate_from = utils.pretty_input(
-            f"Should we reuse the config.json from a previously installed version?",
-            [
-                "no",
-                *[v.as_str() for v in available_versions_to_migrate_from],
-            ],
-        )
-        if version_to_migrate_from != "no":
-            _migrate_config(Version(version_to_migrate_from), version)
-
-
-def switch_to_pyra_version(version: Version) -> None:
-    """For a given release version "x.y.z" installed locally, switch to that version.
-
-    This includes
-    * install python dependencies
-    * run UI installer
-    * update pyra-cli pointer
-    * check whether pyra-cli is in env paths
-    * create VS Code desktop shortcut to code directory
-    """
-
-    if sys.platform not in ["win32", "cygwin"]:
-        print("Skipping installation on non-windows-platforms")
-        return
-
-    pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
-
-    _install_python_dependencies(pyra_dir, version)
-    _run_ui_installer(pyra_dir, version)
-    _update_pyra_cli_pointer(pyra_dir, version)
-    _add_pyra_cli_to_env_path(pyra_dir)
-    _add_pyra_dir_desktop_shortcut(pyra_dir, version)
-
-
-def _migrate_config(from_version: Version, to_version: Version) -> None:
-    pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
-    src_path = os.path.join(pyra_dir, f"pyra-{from_version.as_str()}", "config", "config.json")
-    dst_path = os.path.join(pyra_dir, f"pyra-{to_version.as_str()}", "config", "config.json")
-
-    try:
-        with open(src_path, "r") as f:
-            old_config = json.load(f)
-
-        # migrate from version n to n+1 to n+2 to ... until the final version is reached
-        current_config, current_config_version = old_config, from_version
-        while current_config_version != to_version:
-            current_config, current_config_version = utils.migrate_config(
-                current_config, current_config_version
-            )
-        utils.pretty_print(
-            f"Migrated config from {from_version} to {to_version}", color="green"
-        )
-    except Exception as e:
-        utils.pretty_print(
-            f'Could not migrate config. The config of version "{from_version}" '
-            + f"might be invalid: {e}",
-            color="red",
-        )
-
-    with open(dst_path, "w") as f:
-        json.dump(current_config, f)

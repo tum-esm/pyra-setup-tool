@@ -34,14 +34,14 @@ def run() -> None:
         )
         return
 
-    tasks.manage_local_files.download_version(version_to_be_installed)
-    tasks.installation.switch_to_pyra_version(version_to_be_installed)
+    tasks.download_version.download_version(version_to_be_installed)
+    tasks.install_version.install_version(version_to_be_installed)
 
     # migrate the config.json between version
     available_versions_to_migrate_from = tasks.find_versions.get_versions_to_migrate_from(
         version_to_be_installed
     )
-    tasks.installation.perform_migration(
+    tasks.migrate_config.migrate_config(
         available_versions_to_migrate_from, version_to_be_installed
     )
 

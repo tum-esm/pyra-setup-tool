@@ -23,7 +23,7 @@ def run() -> None:
     else:
         print(f"Remote pyra versions: {', '.join([v.as_str() for v in remote_pyra_versions])}")
 
-    pyra_cli_found_in_env_path = tasks.installation.pyra_dir_is_in_env_path()
+    pyra_cli_found_in_env_path = utils.pyra_dir_is_in_env_path()
     print("Pyra CLI found in environment PATH variable: ", end="")
     if pyra_cli_found_in_env_path:
         utils.shell_utils.pretty_print("Yes", color="green")
