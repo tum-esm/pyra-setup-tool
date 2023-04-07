@@ -11,7 +11,5 @@ def test_get_local_versions(clear_local_pyra_dir: None) -> None:
 def test_get_remote_versions() -> None:
     remote_versions = tasks.find_versions.get_remote_versions()
     assert len(remote_versions) >= 2
-
-    remote_version_strings = [v.as_str() for v in remote_versions]
-    for v in ["4.0.6", "4.0.7"]:
-        assert v in remote_version_strings
+    assert Version("4.0.6") in remote_versions
+    assert Version("4.0.7") in remote_versions

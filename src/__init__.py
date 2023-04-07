@@ -29,6 +29,9 @@ class Version:
         """Returns the version as a tag, e.g. `v1.2.3`"""
         return f"v{self.major}.{self.minor}.{self.patch}"
 
+    def as_ui_installer_name(self) -> str:
+        return f"Pyra.UI_{self.as_str()}_x64_en-US.msi"
+
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, Version)
         return (
@@ -50,6 +53,12 @@ class Version:
     def __gt__(self, other: object) -> bool:
         assert isinstance(other, Version)
         return not (self < other) and (not (self == other))
+
+    def __contains__(self, versions: list[Version]) -> bool:
+        for v in versions:
+            if self == v:
+                return True
+        return False
 
 
 from . import utils, tasks, commands, main
