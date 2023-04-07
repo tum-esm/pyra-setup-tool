@@ -13,7 +13,13 @@ class Version:
         self.minor = int(tag[1:].split(".")[1])
         self.patch = int(tag[1:].split(".")[2])
 
-        assert self.__gt__(Version("4.0.4")), f"Not considering prerelease tags: {name}"
+        assert tag not in [
+            "v4.0.0",
+            "v4.0.1",
+            "v4.0.2",
+            "v4.0.3",
+            "v4.0.4",
+        ], f"Not considering prerelease tags: {name}"
 
     def as_str(self) -> str:
         """Returns the version as a string, e.g. `1.2.3`"""

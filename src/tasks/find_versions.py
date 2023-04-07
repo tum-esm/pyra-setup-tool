@@ -6,7 +6,7 @@ from src import Version, utils
 
 
 def get_local_versions() -> list[Version]:
-    """Returns a list [Version("v4.0.4"), Version("v4.0.5"), ...] of Pyra
+    """Returns a list [Version("4.0.4"), Version("4.0.5"), ...] of Pyra
     versions installed locally."""
 
     pyra_directory = os.path.join(utils.get_documents_dir(), "pyra")
@@ -23,7 +23,7 @@ def get_local_versions() -> list[Version]:
 
 
 def get_remote_versions() -> list[Version]:
-    """Returns a list [Version("v4.0.1"), Version("v4.0.2"), ...] of Pyra
+    """Returns a list [Version("4.0.1"), Version("4.0.2"), ...] of Pyra
     versions available on GitHub. Only considers version that are not
     prereleases."""
 
@@ -42,7 +42,7 @@ def get_remote_versions() -> list[Version]:
 
 
 def get_versions_to_migrate_from(migration_target_version: Version) -> list[Version]:
-    """Returns a list [Version("v4.0.1"), Version("v4.0.2"), ...] of Pyra
+    """Returns a list [Version("4.0.1"), Version("4.0.2"), ...] of Pyra
     versions that can be used to migrate the config.json to the given
     migration_target_version."""
 

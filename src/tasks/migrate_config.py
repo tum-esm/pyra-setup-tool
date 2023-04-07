@@ -8,7 +8,8 @@ from src import Version, utils
 def migrate_config(
     available_versions_to_migrate_from: list[Version], version: Version
 ) -> None:
-    """Migrate the config.json from a previously installed version to the current version."""
+    """Migrate the config.json from a previously installed version
+    to the current version."""
 
     if len(available_versions_to_migrate_from) == 0:
         print("Skipping migration, no available versions to migrate from")
