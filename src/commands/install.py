@@ -19,17 +19,17 @@ def run() -> None:
         return
 
     version_to_be_installed = Version(
-        utils.printing_utils.pretty_input(
+        utils.shell_utils.pretty_input(
             f"Which version should be installed?",
             [v.as_str() for v in remote_pyra_versions],
         )
     )
     if version_to_be_installed not in remote_pyra_versions:
-        utils.printing_utils.pretty_print(f'Invalid version "{version_to_be_installed}"')
+        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_installed}"')
         return
 
     if version_to_be_installed in local_pyra_versions:
-        utils.printing_utils.pretty_print(
+        utils.shell_utils.pretty_print(
             f'Please uninstall the local "{version_to_be_installed}" first'
         )
         return
@@ -45,4 +45,4 @@ def run() -> None:
         available_versions_to_migrate_from, version_to_be_installed
     )
 
-    utils.printing_utils.pretty_print("done!", color="green")
+    utils.shell_utils.pretty_print("done!", color="green")
