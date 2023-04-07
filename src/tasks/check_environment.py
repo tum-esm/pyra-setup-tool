@@ -1,5 +1,4 @@
 import sys
-from typing import Optional
 from src import utils
 
 
@@ -14,16 +13,14 @@ def check_python_version() -> None:
     utils.pretty_print(f"Python version {python_version} is supported", color="green")
 
 
-def check_command_availability(command: str, name: Optional[str] = None) -> None:
+def check_command_availability(command: str) -> None:
     """Checks if a command is available on the system."""
-
-    pretty_command_name = command if name is None else name
     try:
         utils.run_shell_command(f"{command} --version")
-        utils.pretty_print(f"Found {pretty_command_name}!", color="green")
+        utils.pretty_print(f"Found {command}!", color="green")
     except AssertionError as e:
         utils.pretty_print(
-            f"Please make sure to have {pretty_command_name} installed.",
+            f"Please make sure to have {command} installed.",
             color="red",
         )
         raise e

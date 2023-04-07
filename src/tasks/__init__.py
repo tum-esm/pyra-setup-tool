@@ -1,4 +1,4 @@
-from . import check_software_dependencies
+from . import check_environment
 from . import download_version
 from . import find_versions
 from . import install_version
