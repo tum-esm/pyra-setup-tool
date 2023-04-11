@@ -5,16 +5,18 @@ from .shell_utils import run_shell_command
 
 
 def get_documents_dir() -> str:
-    """
-    The directory within which pyra will operate:
+    """The directory within which pyra will operate:
 
+    ```
     📁 <documents directory>
         📁 pyra
             📁 ui-installers
             📁 pyra-x.y.z
             📁 pyra-x.y.z
             📁 ...
+    ```
     """
+
     if sys.platform in ["darwin", "linux"]:
         documents_directory = os.environ["HOME"] + "/Documents"
     elif sys.platform in ["win32", "cygwin"]:
@@ -30,9 +32,8 @@ def get_documents_dir() -> str:
 
 
 def get_desktop_dir() -> str:
-    """
-    The directory where shortcuts should be placed
-    """
+    """The directory where shortcuts should be placed."""
+
     if sys.platform in ["darwin", "linux"]:
         desktop_directory = os.environ["HOME"] + "/Desktop"
     elif sys.platform in ["win32", "cygwin"]:
@@ -48,8 +49,7 @@ def get_desktop_dir() -> str:
 
 
 def initialize_pyra_directories() -> str:
-    """
-    Makes sure that PYRA's operatting directories exist.
+    """Makes sure that PYRA's operating directories exist.
 
     The directories within which pyra will operate:
 
@@ -62,12 +62,13 @@ def initialize_pyra_directories() -> str:
             📁 ...
     ```
 
-    Returns the path to `.../pyra`
+    Returns the path to `.../pyra`.
     """
-    documents_directory = get_documents_dir()
 
-    pyra_directory = os.path.join(documents_directory, "pyra")
-    ui_installers_directory = os.path.join(documents_directory, "pyra", "ui-installers")
+    docs_directory = get_documents_dir()
+
+    pyra_directory = os.path.join(docs_directory, "pyra")
+    ui_installers_directory = os.path.join(docs_directory, "pyra", "ui-installers")
     if not os.path.isdir(pyra_directory):
         os.mkdir(pyra_directory)
         print(f"Created directory '{pyra_directory}'")
@@ -80,7 +81,8 @@ def initialize_pyra_directories() -> str:
 
 
 def pyra_dir_is_in_env_path() -> bool:
-    """Checks if the pyra directory is in the environment's PATH variable."""
+    """Checks if the pyra directory is in the environment's
+    PATH variable."""
 
     pyra_dir = os.path.join(get_documents_dir(), "pyra")
     env_paths = run_shell_command(f"echo %PATH%").split(";")

@@ -38,9 +38,6 @@ def get_remote_versions() -> list[Version]:
     return [Version(release["tag_name"]) for release in releases if not release["prerelease"]]
 
 
-# curl --request GET --url "https://api.github.com/repos/tum-esm/pyra/releases" --header "Accept: application/vnd.github+json" --header "X-GitHub-Api-Version: 2022-11-28"
-
-
 def get_versions_to_migrate_from(migration_target_version: Version) -> list[Version]:
     """Returns a list [Version("4.0.1"), Version("4.0.2"), ...] of Pyra
     versions that can be used to migrate the config.json to the given
