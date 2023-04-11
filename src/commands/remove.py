@@ -14,7 +14,7 @@ def run() -> None:
         )
     )
     if version_to_be_removed not in local_pyra_versions:
-        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_removed}"')
+        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_removed.as_str()}"')
         return
 
     tasks.remove_version.remove_version(version_to_be_removed)

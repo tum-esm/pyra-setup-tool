@@ -18,7 +18,7 @@ def run() -> None:
         )
     )
     if version_to_be_used not in local_pyra_versions:
-        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_used}"')
+        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_used.as_str()}"')
         return
 
     tasks.install_version.install_version(version_to_be_used)
