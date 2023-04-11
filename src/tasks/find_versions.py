@@ -51,7 +51,9 @@ def get_versions_to_migrate_from(migration_target_version: Version) -> list[Vers
         if (
             v < migration_target_version
             and os.path.isfile(
-                os.path.join(documents_dir, "pyra", f"pyra-{v}", "config", "config.json")
+                os.path.join(
+                    documents_dir, "pyra", f"pyra-{v.as_str()}", "config", "config.json"
+                )
             )
         )
     ]
