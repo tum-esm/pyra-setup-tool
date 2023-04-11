@@ -41,11 +41,12 @@ def _migrate_config_files(from_version: Version, to_version: Version) -> None:
                 current_config, current_config_version
             )
         utils.pretty_print(
-            f"Migrated config from {from_version} to {to_version}", color="green"
+            f"Migrated config from {from_version.as_str()} to {to_version.as_str()}",
+            color="green",
         )
     except Exception as e:
         utils.pretty_print(
-            f'Could not migrate config. The config of version "{from_version}" '
+            f'Could not migrate config. The config of version "{from_version.as_str()}" '
             + f"might be invalid: {e}",
             color="red",
         )
@@ -67,31 +68,16 @@ def _migrate_a_single_config_object(
 
     try:
         to_version = {
-            Version("v4.0.4"): Version("v4.0.5"),
             Version("v4.0.5"): Version("v4.0.6"),
             Version("v4.0.6"): Version("v4.0.7"),
         }[from_version]
     except KeyError:
-        raise Exception(f'Unknown version "{from_version}"')
+        raise Exception(f'Unknown version "{from_version.as_str()}"')
 
     to_dict = json.loads(json.dumps(from_dict))
 
     try:
         to_dict["general"]["version"] = to_version.as_str()
-
-        if to_version == Version("v4.0.5"):
-            to_dict["measurement_triggers"]["consider_helios"] = to_dict[
-                "measurement_triggers"
-            ]["consider_vbdsd"]
-            del to_dict["measurement_triggers"]["consider_vbdsd"]
-
-            to_dict["helios"] = to_dict["vbdsd"]
-            del to_dict["vbdsd"]
-
-            if to_dict["helios"] is not None:
-                to_dict["helios"]["edge_detection_threshold"] = 0.01
-
-            to_dict["upload"] = None
 
         if to_version == Version("v4.0.6"):
             pass
@@ -104,7 +90,8 @@ def _migrate_a_single_config_object(
 
     except Exception as e:
         raise Exception(
-            f"Could not perform config migration " + f"{from_version} -> {to_version}: {e}"
+            f"Could not perform config migration "
+            + f"{from_version.as_str()} -> {to_version.as_str()}: {e}"
         )
 
     return to_dict, to_version

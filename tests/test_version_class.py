@@ -20,3 +20,9 @@ def test_version_class() -> None:
     assert v in [Version("1.2.3"), Version("1.2.4")]
     assert v in [Version("1.2.2"), Version("1.2.3")]
     assert v not in [Version("1.2.4"), Version("1.2.5")]
+
+    assert {
+        Version("1.2.3"): 20,
+        Version("1.2.4"): 30,
+        Version("1.2.5"): 40,
+    }[Version("1.2.4")] == 30
