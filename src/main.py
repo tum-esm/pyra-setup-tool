@@ -12,6 +12,15 @@ from src import utils, commands, tasks
 
 
 def run() -> None:
+    """The main entry point of the program.
+
+    The program is structured as a loop that waits for user input and
+    executes the corresponding command. The loop is terminated by the
+    user entering the command "exit".
+
+    Available commands: `help`, `status`, `install`, `rollback`,
+    `remove`, `exit`"""
+
     try:
         utils.print_line()
         utils.pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")

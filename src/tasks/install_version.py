@@ -29,9 +29,9 @@ def install_version(version: Version) -> None:
 
 
 def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
-    code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
-
     """install system dependencies with poetry"""
+
+    code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
     for command in [
         "poetry config virtualenvs.create false",
         "poetry env use system",
