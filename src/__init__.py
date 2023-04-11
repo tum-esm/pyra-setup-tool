@@ -60,5 +60,8 @@ class Version:
                 return True
         return False
 
+    def __hash__(self) -> int:
+        return self.major * 1_000_000 + self.minor * 1_000 + self.patch
+
 
 from . import utils, tasks, commands, main
