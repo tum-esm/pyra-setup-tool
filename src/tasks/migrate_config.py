@@ -14,15 +14,20 @@ def migrate_config(
     if len(available_versions_to_migrate_from) == 0:
         print("Skipping migration, no available versions to migrate from")
     else:
-        version_to_migrate_from = utils.pretty_input(
+        answer = utils.pretty_input(
             f"Should we reuse the config.json from a previously installed version?",
             [
                 "no",
                 *[v.as_str() for v in available_versions_to_migrate_from],
             ],
         )
-        if version_to_migrate_from != "no":
-            _migrate_config_files(Version(version_to_migrate_from), version)
+        if answer != "no":
+            try:
+                version_to_migrate_from = Version(answer)
+            except AssertionError:
+                utils.pretty_print(f'Invalid answer "{answer}"')
+                return
+            _migrate_config_files(version_to_migrate_from, version)
 
 
 def _migrate_config_files(from_version: Version, to_version: Version) -> None:

@@ -11,12 +11,15 @@ def run() -> None:
     """
 
     local_pyra_versions = tasks.find_versions.get_local_versions()
-    version_to_be_used = Version(
-        utils.shell_utils.pretty_input(
-            f"Which version should be rolled back to?",
-            [v.as_str() for v in local_pyra_versions],
-        )
+    answer = utils.shell_utils.pretty_input(
+        f"Which version should be rolled back to?",
+        [v.as_str() for v in local_pyra_versions],
     )
+    try:
+        version_to_be_used = Version(answer)
+    except AssertionError:
+        utils.shell_utils.pretty_print(f'Invalid answer "{answer}"')
+        return
     if version_to_be_used not in local_pyra_versions:
         utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_used.as_str()}"')
         return
