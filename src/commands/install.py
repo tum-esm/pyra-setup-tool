@@ -18,12 +18,16 @@ def run() -> None:
         print("Did not find any remote pyra versions.")
         return
 
-    version_to_be_installed = Version(
-        utils.shell_utils.pretty_input(
-            f"Which version should be installed?",
-            [v.as_str() for v in remote_pyra_versions],
-        )
+    answer = utils.shell_utils.pretty_input(
+        f"Which version should be installed?",
+        [v.as_str() for v in remote_pyra_versions],
     )
+    try:
+        version_to_be_installed = Version(answer)
+    except AssertionError:
+        utils.shell_utils.pretty_print(f'Invalid answer "{answer}"')
+        return
+
     if version_to_be_installed not in remote_pyra_versions:
         utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_installed.as_str()}"')
         return
