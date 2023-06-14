@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 from typing import Any
 from src import Version, utils
 
@@ -75,6 +74,7 @@ def _migrate_a_single_config_object(
         to_version = {
             Version("v4.0.5"): Version("v4.0.6"),
             Version("v4.0.6"): Version("v4.0.7"),
+            Version("v4.0.7"): Version("v4.0.8"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -90,6 +90,11 @@ def _migrate_a_single_config_object(
         if to_version == Version("v4.0.7"):
             if to_dict["helios"] is not None:
                 del to_dict["helios"]["measurement_threshold"]
+
+        if to_version == Version("v4.0.8"):
+            to_dict["camtracker"]["motor_offset_threshold"] = abs(
+                to_dict["camtracker"]["motor_offset_threshold"]
+            )
 
         # add future migration rules here
 
