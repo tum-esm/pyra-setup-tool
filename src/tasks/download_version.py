@@ -11,7 +11,8 @@ def download_version(version: Version) -> None:
     # download codebase tarball and extract code
     utils.shell_utils.run_shell_command(
         f"curl -L https://github.com/tum-esm/pyra/archive/refs/tags/"
-        + f"{version.as_tag()}.tar.gz | tar zx",
+        + f"{version.as_tag()}.tar.gz --output {version.as_tag()}.tar.gz "
+        + f"&& tar -xzf {version.as_tag()}.tar.gz",
         cwd=pyra_dir,
     )
     utils.shell_utils.pretty_print("Downloaded code", color="green")
