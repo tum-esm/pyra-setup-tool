@@ -89,7 +89,7 @@ def run() -> None:
                 print("    * add desktop-shortcut to code directory")
                 print("remove: remove a locally installed version")
 
-            if command == "status":
+            elif command == "status":
                 commands.status.run()
 
             elif command == "install":
