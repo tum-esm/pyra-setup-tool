@@ -10,7 +10,8 @@ def run() -> None:
         return
 
     answer = utils.shell_utils.pretty_input(
-        f"Which version should be removed?", [v.as_str() for v in local_pyra_versions]
+        f"Which version should be removed?",
+        [v.as_str() for v in local_pyra_versions]
     )
     try:
         version_to_be_removed = Version(answer)
@@ -18,7 +19,9 @@ def run() -> None:
         utils.shell_utils.pretty_print(f'Invalid answer "{answer}"')
         return
     if version_to_be_removed not in local_pyra_versions:
-        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_removed.as_str()}"')
+        utils.shell_utils.pretty_print(
+            f'Invalid version "{version_to_be_removed.as_str()}"'
+        )
         return
 
     tasks.remove_version.remove_version(version_to_be_removed)

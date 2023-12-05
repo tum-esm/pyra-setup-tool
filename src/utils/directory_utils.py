@@ -68,7 +68,9 @@ def initialize_pyra_directories() -> str:
     docs_directory = get_documents_dir()
 
     pyra_directory = os.path.join(docs_directory, "pyra")
-    ui_installers_directory = os.path.join(docs_directory, "pyra", "ui-installers")
+    ui_installers_directory = os.path.join(
+        docs_directory, "pyra", "ui-installers"
+    )
     if not os.path.isdir(pyra_directory):
         os.mkdir(pyra_directory)
         print(f"Created directory '{pyra_directory}'")

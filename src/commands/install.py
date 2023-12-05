@@ -29,7 +29,9 @@ def run() -> None:
         return
 
     if version_to_be_installed not in remote_pyra_versions:
-        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_installed.as_str()}"')
+        utils.shell_utils.pretty_print(
+            f'Invalid version "{version_to_be_installed.as_str()}"'
+        )
         return
 
     if version_to_be_installed in local_pyra_versions:

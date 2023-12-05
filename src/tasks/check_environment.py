@@ -10,7 +10,9 @@ def check_python_version() -> None:
         "3.10."
     ), f"Please use Python 3.10.x (currently at {python_version})"
 
-    utils.pretty_print(f"Python version {python_version} is supported", color="green")
+    utils.pretty_print(
+        f"Python version {python_version} is supported", color="green"
+    )
 
 
 def check_command_availability(command: str) -> None:

@@ -31,8 +31,12 @@ def migrate_config(
 
 def _migrate_config_files(from_version: Version, to_version: Version) -> None:
     pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
-    src_path = os.path.join(pyra_dir, f"pyra-{from_version.as_str()}", "config", "config.json")
-    dst_path = os.path.join(pyra_dir, f"pyra-{to_version.as_str()}", "config", "config.json")
+    src_path = os.path.join(
+        pyra_dir, f"pyra-{from_version.as_str()}", "config", "config.json"
+    )
+    dst_path = os.path.join(
+        pyra_dir, f"pyra-{to_version.as_str()}", "config", "config.json"
+    )
 
     try:
         with open(src_path, "r") as f:
@@ -100,8 +104,8 @@ def _migrate_a_single_config_object(
 
     except Exception as e:
         raise Exception(
-            f"Could not perform config migration "
-            + f"{from_version.as_str()} -> {to_version.as_str()}: {e}"
+            f"Could not perform config migration " +
+            f"{from_version.as_str()} -> {to_version.as_str()}: {e}"
         )
 
     return to_dict, to_version

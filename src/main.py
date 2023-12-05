@@ -23,7 +23,9 @@ def run() -> None:
 
     try:
         utils.print_line()
-        utils.pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")
+        utils.pretty_print(
+            "Welcome to the pyra-setup-tool! Instruction formatting: "
+        )
         utils.pretty_print("  * checkpoints = green ", color="green")
         utils.pretty_print("  * expecting user input = yellow ", color="yellow")
         utils.print_line()
@@ -31,13 +33,13 @@ def run() -> None:
         # The following check is necessary because I did not manage to de-
         # activate the current venv from within a subprocess/system call/etc.
         utils.pretty_print(
-            "Please DO NOT use a virtual environment for PYRA! Use the"
-            + " system interpreter available via the command 'python'. "
-            + f"Currently using the interpreter '{sys.executable}'"
+            "Please DO NOT use a virtual environment for PYRA! Use the" +
+            " system interpreter available via the command 'python'. " +
+            f"Currently using the interpreter '{sys.executable}'"
         )
         if not utils.pretty_input(
-            f"Run 'which python' in another shell. Are system-"
-            + "interpreter and the current one identical?",
+            f"Run 'which python' in another shell. Are system-" +
+            "interpreter and the current one identical?",
             ["Y", "n"],
         ).startswith("Y"):
             utils.pretty_print("Aborting", color="red")
@@ -71,21 +73,31 @@ def run() -> None:
                 print("status: check the installation status")
                 print("    * list locally install versions")
                 print("    * list available release version")
-                print("    * show, if pyra-cli command is installed in environment path")
-                print("    * show which pyra version the cli-command currently uses")
+                print(
+                    "    * show, if pyra-cli command is installed in environment path"
+                )
+                print(
+                    "    * show which pyra version the cli-command currently uses"
+                )
                 print("install: install a new version from GitHub")
                 print("    * choose an available release version")
                 print("    * download code from github")
                 print("    * install dependencies")
                 print("    * download UI and run windows installer")
                 print("    * set the pyra-cli to point to the new version")
-                print("    * test if pyra-cli command is installed in environment path")
+                print(
+                    "    * test if pyra-cli command is installed in environment path"
+                )
                 print("    * add desktop-shortcut to code directory")
                 print("    * migrate config from an older version")
                 print("rollback: (use an old local version again)")
-                print("    * run the installer for an already existing UI version")
+                print(
+                    "    * run the installer for an already existing UI version"
+                )
                 print("    * set the pyra-cli to point to the new version")
-                print("    * test if pyra-cli command is installed in environment path")
+                print(
+                    "    * test if pyra-cli command is installed in environment path"
+                )
                 print("    * add desktop-shortcut to code directory")
                 print("remove: remove a locally installed version")
 

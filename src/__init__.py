@@ -9,9 +9,9 @@ class Version:
 
         tag_pattern = re.compile(r"^v\d+\.\d+\.\d+$")
         assert tag_pattern.match(tag), f"Invalid name: {tag}"
-        self.major = int(tag[1:].split(".")[0])
-        self.minor = int(tag[1:].split(".")[1])
-        self.patch = int(tag[1:].split(".")[2])
+        self.major = int(tag[1 :].split(".")[0])
+        self.minor = int(tag[1 :].split(".")[1])
+        self.patch = int(tag[1 :].split(".")[2])
 
         assert tag not in [
             "v4.0.0",
@@ -35,9 +35,8 @@ class Version:
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, Version)
         return (
-            self.major == other.major
-            and self.minor == other.minor
-            and self.patch == other.patch
+            self.major == other.major and self.minor == other.minor and
+            self.patch == other.patch
         )
 
     def __lt__(self, other: object) -> bool:

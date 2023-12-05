@@ -15,13 +15,17 @@ def run() -> None:
     if len(local_pyra_versions) == 0:
         print("Did not find any local pyra versions.")
     else:
-        print(f"Local pyra versions: {', '.join([v.as_str() for v in local_pyra_versions])}")
+        print(
+            f"Local pyra versions: {', '.join([v.as_str() for v in local_pyra_versions])}"
+        )
 
     remote_pyra_versions = tasks.find_versions.get_remote_versions()
     if len(remote_pyra_versions) == 0:
         print("Did not find any remote pyra versions.")
     else:
-        print(f"Remote pyra versions: {', '.join([v.as_str() for v in remote_pyra_versions])}")
+        print(
+            f"Remote pyra versions: {', '.join([v.as_str() for v in remote_pyra_versions])}"
+        )
 
     pyra_cli_found_in_env_path = utils.pyra_dir_is_in_env_path()
     print("Pyra CLI found in environment PATH variable: ", end="")

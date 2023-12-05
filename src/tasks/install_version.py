@@ -46,7 +46,8 @@ def _run_ui_installer(pyra_dir: str, version: Version) -> None:
     has to click through."""
 
     utils.pretty_print(
-        "Please install the UI using the installer that opens now", color="yellow"
+        "Please install the UI using the installer that opens now",
+        color="yellow"
     )
     ui_installer_path = os.path.join(
         pyra_dir, "ui-installers", f"Pyra.UI_{version.as_str()}_x64_en-US.msi"
@@ -79,7 +80,8 @@ def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
 
     if utils.pyra_dir_is_in_env_path():
         utils.pretty_print(
-            '"pyra-cli" command already in user environment variables', color="green"
+            '"pyra-cli" command already in user environment variables',
+            color="green"
         )
     else:
         utils.pretty_input(
@@ -97,7 +99,9 @@ def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: Version) -> None:
 
     # Remove all old directory shortcuts
     p = re.compile(r"^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
-    old_shortcuts = [s for s in os.listdir(desktop_dir) if p.match(s) is not None]
+    old_shortcuts = [
+        s for s in os.listdir(desktop_dir) if p.match(s) is not None
+    ]
     for s in old_shortcuts:
         os.remove(os.path.join(desktop_dir, s))
 
@@ -105,8 +109,12 @@ def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: Version) -> None:
     # script for this instead of a "windows shortcut" because the
     # latter are too much effort to create or require a python library
     with open(
-        os.path.join(desktop_dir, f"open-pyra-{version.as_str()}-directory.bat"), "w"
+        os.path.join(
+            desktop_dir, f"open-pyra-{version.as_str()}-directory.bat"
+        ), "w"
     ) as f:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
-    utils.pretty_print("Created desktop shortcut to code directory", color="green")
+    utils.pretty_print(
+        "Created desktop shortcut to code directory", color="green"
+    )

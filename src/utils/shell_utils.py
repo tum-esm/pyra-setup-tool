@@ -48,7 +48,9 @@ def pretty_print(
     color: Optional[Literal["red", "green", "yellow"]] = None,
     end: str = "\n",
 ) -> None:
-    color_sequences = {"red": Fore.RED, "green": Fore.GREEN, "yellow": Fore.YELLOW}
+    color_sequences = {
+        "red": Fore.RED, "green": Fore.GREEN, "yellow": Fore.YELLOW
+    }
     if color is not None:
         text = color_sequences[color] + text + Style.RESET_ALL
     print(text, end=end)
