@@ -23,24 +23,23 @@ jobs:
           path: .venv
           key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
 
-      # install poetry if venv not cached
+      # install dependencies if venv not cached
       - name: Install Poetry
         if: steps.load-cached-venv.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
-          version: 1.3.2
+          version: 1.7.1
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
-
-      # install dependencies if venv not cached
       - name: Install dependencies
         if: steps.load-cached-venv.outputs.cache-hit != 'true'
-        run: poetry install
+        run: |
+          poetry install --with dev
 
       # run test suite
       - name: Run pytest tests
         run: |
           source .venv/bin/activate
-          pytest --cov=src tests
+          pytest --verbose --cov=src tests
           coverage report
