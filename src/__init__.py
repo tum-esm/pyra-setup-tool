@@ -9,6 +9,7 @@ class Version:
 
         tag_pattern = re.compile(r"^v\d+\.\d+\.\d+$")
         assert tag_pattern.match(tag), f"Invalid name: {tag}"
+        self.tag = tag
         self.major = int(tag[1 :].split(".")[0])
         self.minor = int(tag[1 :].split(".")[1])
         self.patch = int(tag[1 :].split(".")[2])
@@ -24,6 +25,9 @@ class Version:
     def as_str(self) -> str:
         """Returns the version as a string, e.g. `1.2.3`"""
         return f"{self.major}.{self.minor}.{self.patch}"
+
+    def __str__(self) -> str:
+        return self.as_str()
 
     def as_tag(self) -> str:
         """Returns the version as a tag, e.g. `v1.2.3`"""

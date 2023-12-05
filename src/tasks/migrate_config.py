@@ -43,11 +43,7 @@ def _migrate_config_files(from_version: Version, to_version: Version) -> None:
             old_config = json.load(f)
 
         # migrate from version n to n+1 to n+2 to ... until the final version is reached
-        current_config, current_config_version = old_config, from_version
-        while current_config_version != to_version:
-            current_config, current_config_version = _migrate_a_single_config_object(
-                current_config, current_config_version
-            )
+        new_config = migrate_config_object(old_config, from_version, to_version)
         utils.pretty_print(
             f"Migrated config from {from_version.as_str()} to {to_version.as_str()}",
             color="green",
@@ -60,7 +56,20 @@ def _migrate_config_files(from_version: Version, to_version: Version) -> None:
         )
 
     with open(dst_path, "w") as f:
-        json.dump(current_config, f)
+        json.dump(new_config, f)
+
+
+def migrate_config_object(
+    from_config_dict: Any,
+    from_version: Version,
+    to_version: Version,
+) -> Any:
+    current_config, current_config_version = from_config_dict, from_version
+    while current_config_version != to_version:
+        current_config, current_config_version = _migrate_a_single_config_object(
+            current_config, current_config_version
+        )
+    return current_config
 
 
 def _migrate_a_single_config_object(
@@ -89,7 +98,11 @@ def _migrate_a_single_config_object(
         to_dict["general"]["version"] = to_version.as_str()
 
         if to_version == Version("v4.0.6"):
-            pass
+            if to_dict["error_email"]["sender_password"] == "..." and to_dict[
+                "error_email"]["sender_address"
+                              ] == "pyra.technical.user@gmail.com":
+                to_dict["error_email"]["sender_address"
+                                      ] = "technical-user@domain.com"
 
         if to_version == Version("v4.0.7"):
             if to_dict["helios"] is not None:
@@ -105,7 +118,7 @@ def _migrate_a_single_config_object(
     except Exception as e:
         raise Exception(
             f"Could not perform config migration " +
-            f"{from_version.as_str()} -> {to_version.as_str()}: {e}"
+            f"{from_version.as_str()} -> {to_version.as_str()}: {repr(e)}"
         )
 
     return to_dict, to_version
