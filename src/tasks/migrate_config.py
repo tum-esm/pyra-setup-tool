@@ -88,6 +88,7 @@ def _migrate_a_single_config_object(
             Version("v4.0.5"): Version("v4.0.6"),
             Version("v4.0.6"): Version("v4.0.7"),
             Version("v4.0.7"): Version("v4.0.8"),
+            Version("v4.0.8"): Version("v4.1.0"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -112,6 +113,65 @@ def _migrate_a_single_config_object(
             to_dict["camtracker"]["motor_offset_threshold"] = abs(
                 to_dict["camtracker"]["motor_offset_threshold"]
             )
+
+        if to_version == Version("v4.1.0"):
+            # camtracker
+            to_dict["camtracker"]["restart_if_logs_are_too_old"] = False
+            to_dict["camtracker"]["restart_if_cover_remains_closed"] = False
+
+            # error emails
+            to_dict["error_email"]["smtp_host"] = "smtp.gmail.com"
+            to_dict["error_email"]["smtp_port"] = 587
+            to_dict["error_email"]["smtp_username"] = from_dict["error_email"][
+                "sender_address"]
+            to_dict["error_email"]["smtp_password"] = from_dict["error_email"][
+                "sender_password"]
+            del to_dict["error_email"]["sender_password"]
+
+            # helios
+            to_dict["helios"]["min_seconds_between_state_changes"] = 180
+            to_dict["helios"]["edge_pixel_threshold"] = from_dict["helios"][
+                "edge_detection_threshold"] * 100
+            del to_dict["helios"]["edge_detection_threshold"]
+            to_dict["helios"]["edge_color_threshold"] = 40
+            to_dict["helios"]["target_pixel_brightness"] = 50
+            to_dict["helios"]["save_images_to_archive"] = from_dict["helios"][
+                "save_images"]
+            del to_dict["helios"]["save_images"]
+            to_dict["helios"]["save_current_image"] = False
+
+            # upload
+            del to_dict["upload"]["upload_ifgs"]
+            del to_dict["upload"]["src_directory_ifgs"]
+            del to_dict["upload"]["dst_directory_ifgs"]
+            del to_dict["upload"]["remove_src_ifgs_after_upload"]
+            del to_dict["upload"]["upload_helios"]
+            del to_dict["upload"]["dst_directory_helios"]
+            del to_dict["upload"]["remove_src_helios_after_upload"]
+            to_dict["upload"]["streams"] = [{
+                "is_active":
+                    from_dict["upload"]["upload_ifgs"],
+                "label":
+                    "interferograms",
+                "variant":
+                    "directories",
+                "dated_regex":
+                    "^%Y%m%d$",
+                "src_directory":
+                    from_dict["upload"]["src_directory_ifgs"],
+                "dst_directory":
+                    from_dict["upload"]["dst_directory_ifgs"],
+                "remove_src_after_upload":
+                    from_dict["upload"]["remove_src_ifgs_after_upload"],
+            }, {
+                "is_active": False,
+                "label": "datalogger",
+                "variant": "files",
+                "dated_regex": "^datalogger-%Y-%m-%d*$",
+                "src_directory": "...",
+                "dst_directory": "...",
+                "remove_src_after_upload": False,
+            }]
 
         # add future migration rules here
 
