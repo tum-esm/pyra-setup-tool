@@ -39,5 +39,5 @@ each_dict_entry_on_separate_line = false
 spaces_around_subscript_colon = true
 
 [[tool.mypy.overrides]]
-module = ["colorama.*"]
+module = ["colorama.*", "deepdiff"]
 ignore_missing_imports = true

@@ -53,9 +53,17 @@ class Version:
 
         return self.patch < other.patch
 
+    def __le__(self, other: object) -> bool:
+        assert isinstance(other, Version)
+        return self < other or self == other
+
     def __gt__(self, other: object) -> bool:
         assert isinstance(other, Version)
         return not (self < other) and (not (self == other))
+
+    def __ge__(self, other: object) -> bool:
+        assert isinstance(other, Version)
+        return not (self < other)
 
     def __contains__(self, versions: list[Version]) -> bool:
         for v in versions:
