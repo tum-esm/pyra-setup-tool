@@ -7,12 +7,14 @@ def test_get_documents_dir() -> None:
     d = utils.get_documents_dir()
     assert d.endswith("Documents")
     assert d == os.path.expanduser("~/Documents")
+    assert os.path.isdir(d)
 
 
 def test_get_desktop_dir() -> None:
     d = utils.get_desktop_dir()
     assert d.endswith("Desktop")
     assert d == os.path.expanduser("~/Desktop")
+    assert os.path.isdir(d)
 
 
 def test_initialize_pyra_directories(clear_local_pyra_dir: None) -> None:
