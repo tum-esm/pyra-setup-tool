@@ -2,7 +2,7 @@ name: "test"
 on: push
 jobs:
   test:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
@@ -40,6 +40,8 @@ jobs:
       # run test suite
       - name: Run pytest tests
         run: |
+          mkdir ~/Documents
+          mkdir ~/Desktop
           source .venv/bin/activate
           pytest --verbose --cov=src tests
           coverage report
