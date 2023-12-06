@@ -1,6 +1,7 @@
 # PYRA Setup Tool
 
-[![](https://badgen.net/github/checks/tum-esm/pyra-setup-tool/main?icon=github&label=ci%20tests)](https://github.com/tum-esm/pyra-setup-tool/actions)
+[![](https://joss.theoj.org/papers/d47b5197eb098bccfbd27b6a6c441cb4/status.svg)](https://joss.theoj.org/papers/d47b5197eb098bccfbd27b6a6c441cb4)
+[![](https://img.shields.io/github/actions/workflow/status/tum-esm/pyra-setup-tool/test.yml?label=Setup%20Tool%20CI%20Tests&cacheSeconds=60)](https://github.com/tum-esm/pyra-setup-tool/actions)
 
 **Tool that can be used to set up [PYRA](http://github.com/tum-esm/pyra). Documentation on: [pyra.esm.ei.tum.de/docs](https://pyra.esm.ei.tum.de/docs)**
 
