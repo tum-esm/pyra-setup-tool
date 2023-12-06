@@ -15,17 +15,9 @@ jobs:
         with:
           python-version: "3.10.6"
 
-      # load caches (dependencies and poetry binaries)
-      - name: Load cached venv
-        id: load-cached-venv
-        uses: actions/cache@v3
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ hashFiles('poetry.lock') }}
-
-      # install dependencies if venv not cached
+      # install dependencies no caching because we need poetry anyway
+      # and depdenencies installation takes less than caching
       - name: Install Poetry
-        if: steps.load-cached-venv.outputs.cache-hit != 'true'
         uses: snok/install-poetry@v1
         with:
           version: 1.7.1
@@ -33,7 +25,6 @@ jobs:
           virtualenvs-in-project: true
           installer-parallel: true
       - name: Install dependencies
-        if: steps.load-cached-venv.outputs.cache-hit != 'true'
         run: |
           poetry install --with dev
 
