@@ -89,6 +89,7 @@ def _migrate_a_single_config_object(
             Version("v4.0.6"): Version("v4.0.7"),
             Version("v4.0.7"): Version("v4.0.8"),
             Version("v4.0.8"): Version("v4.1.0"),
+            Version("v4.1.0"): Version("v4.1.1"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -172,6 +173,10 @@ def _migrate_a_single_config_object(
                 "dst_directory": "...",
                 "remove_src_after_upload": False,
             }]
+
+        if to_version == Version("v4.1.1"):
+            if "upload" in to_dict.keys():
+                to_dict["upload"]["only_upload_at_night"] = True
 
         # add future migration rules here
 
