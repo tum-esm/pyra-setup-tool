@@ -35,7 +35,7 @@ def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
     for command in [
         "poetry config virtualenvs.create false",
         "poetry env use system",
-        "poetry install",
+        "poetry install --no-root",
     ]:
         utils.run_shell_command(command, cwd=code_dir, silent=False)
     utils.pretty_print("Installed code dependencies", color="green")
