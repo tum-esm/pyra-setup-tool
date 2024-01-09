@@ -10,6 +10,7 @@ def test_migration() -> None:
         Version("4.0.7"),
         Version("4.0.8"),
         Version("4.1.0"),
+        Version("4.1.1"),
     ]:
         src_config = tum_esm_utils.files.load_json_file(
             tum_esm_utils.files.rel_to_abs_path(
@@ -22,6 +23,7 @@ def test_migration() -> None:
             Version("4.0.8"),
             Version("4.1.0"),
             Version("4.1.1"),
+            Version("4.1.2"),
         ]:
             if to_version <= from_version:
                 continue
