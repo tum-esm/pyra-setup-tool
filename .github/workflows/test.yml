@@ -23,6 +23,5 @@ jobs:
         run: |
           mkdir ~/Documents
           mkdir ~/Desktop
-          source .venv/bin/activate
           pytest --verbose --cov=src tests
           coverage report
