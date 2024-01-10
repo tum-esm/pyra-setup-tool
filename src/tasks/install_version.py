@@ -1,7 +1,11 @@
 import os
 import re
+import shutil
 import sys
 from src import Version, utils
+
+SRC_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REQUIREMENTS_DIR = os.path.join(SRC_DIR, "utils", "requirements")
 
 
 def install_version(version: Version) -> None:
@@ -29,15 +33,20 @@ def install_version(version: Version) -> None:
 
 
 def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
-    """install system dependencies with poetry"""
+    """install system dependencies with pip"""
 
     code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
-    for command in [
-        "poetry config virtualenvs.create false",
-        "poetry env use system",
-        "poetry install --no-root",
-    ]:
-        utils.run_shell_command(command, cwd=code_dir, silent=False)
+    if version <= Version("4.1.2"):
+        requirements_path = os.path.join(
+            REQUIREMENTS_DIR, f"{version.as_str()}.txt"
+        )
+        assert os.path.isfile(
+            requirements_path
+        ), f"File not found: {requirements_path}"
+        shutil.copyfile(
+            requirements_path, os.path.join(code_dir, "requirements.txt")
+        )
+    utils.run_shell_command("pip install .", cwd=code_dir, silent=False)
     utils.pretty_print("Installed code dependencies", color="green")
 
 
