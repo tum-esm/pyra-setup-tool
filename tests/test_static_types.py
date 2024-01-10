@@ -14,6 +14,4 @@ def test_static_types() -> None:
     _rm(".mypy_cache/3.10/run.*")
 
     for path in ["run.py", "src/", "tests/"]:
-        assert os.system(
-            f"cd {PROJECT_DIR} && .venv/bin/python -m mypy {path}"
-        ) == 0
+        assert os.system(f"cd {PROJECT_DIR} && python -m mypy {path}") == 0
