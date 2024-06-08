@@ -52,6 +52,11 @@ def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
         )
     else:
         utils.run_shell_command("pip install .", cwd=code_dir, silent=False)
+        utils.run_shell_command(
+            "pip uninstall polars polars-lts-cpu --yes",
+            cwd=code_dir,
+            silent=False
+        )
     utils.pretty_print("Installed code dependencies", color="green")
 
 
