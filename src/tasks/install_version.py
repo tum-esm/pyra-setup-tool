@@ -37,15 +37,16 @@ def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
 
     code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
     if version <= Version("4.1.2"):
-        requirements_path = os.path.join(
+        requirements_src_path = os.path.join(
             REQUIREMENTS_DIR, f"{version.as_str()}.txt"
         )
-        assert os.path.isfile(
-            requirements_path
-        ), f"File not found: {requirements_path}"
-        shutil.copyfile(
-            requirements_path, os.path.join(code_dir, "requirements.txt")
-        )
+        requirements_dst_path = os.path.join(code_dir, "requirements.txt")
+        if not os.path.isfile(requirements_dst_path):
+            assert os.path.isfile(
+                requirements_src_path
+            ), f"File not found: {requirements_src_path}"
+            shutil.copyfile(requirements_src_path, requirements_dst_path)
+
         utils.run_shell_command(
             "pip install -r requirements.txt", cwd=code_dir, silent=False
         )
