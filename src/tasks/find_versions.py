@@ -37,7 +37,10 @@ def get_remote_versions(prerelease: bool = False) -> list[Version]:
     )
     return [
         Version(release["tag_name"])
-        for release in releases if (prerelease == release["prerelease"])
+        for release in releases if (
+            (prerelease == release["prerelease"]) and
+            (release["tag_name"] not in ["v4.0.0", "v4.0.1", "v4.0.2", "v4.0.3", "v4.0.4"])
+        )
     ]
 
 
