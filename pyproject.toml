@@ -1,6 +1,6 @@
 [project]
 name = "pyra-setup-tool"
-version = "4.1.3"
+version = "4.1.4"
 description = "manage your Pyra installations"
 authors = [{ name = "Moritz Makowski", email = "moritz.makowski@tum.de" }]
 dependencies = ["colorama==0.4.6"]
