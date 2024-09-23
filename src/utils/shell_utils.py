@@ -46,6 +46,7 @@ def run_shell_command(
 def pretty_print(
     text: str,
     color: Optional[Literal["red", "green", "yellow"]] = None,
+    bold: bool = False,
     end: str = "\n",
 ) -> None:
     color_sequences = {
@@ -53,6 +54,8 @@ def pretty_print(
     }
     if color is not None:
         text = color_sequences[color] + text + Style.RESET_ALL
+    if bold:
+        text = Style.BRIGHT + text + Style.RESET_ALL
     print(text, end=end)
 
 

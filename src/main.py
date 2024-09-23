@@ -69,36 +69,28 @@ def run() -> None:
             )
 
             if command == "help":
-                print("status: check the installation status")
+                # fmt: off
+                utils.pretty_print("status: check the installation status", bold=True)
                 print("    * list locally install versions")
                 print("    * list available release version")
-                print(
-                    "    * show, if pyra-cli command is installed in environment path"
-                )
-                print(
-                    "    * show which pyra version the cli-command currently uses"
-                )
-                print("install: install a new version from GitHub")
+                print("    * show, if pyra-cli command is installed in environment path")
+                print("    * show which pyra version the cli-command currently uses")
+                utils.pretty_print("install: install a new version from GitHub", bold=True)
                 print("    * choose an available release version")
                 print("    * download code from github")
                 print("    * install dependencies")
                 print("    * download UI and run windows installer")
                 print("    * set the pyra-cli to point to the new version")
-                print(
-                    "    * test if pyra-cli command is installed in environment path"
-                )
+                print("    * test if pyra-cli command is installed in environment path")
                 print("    * add desktop-shortcut to code directory")
                 print("    * migrate config from an older version")
-                print("rollback: (use an old local version again)")
-                print(
-                    "    * run the installer for an already existing UI version"
-                )
+                utils.pretty_print("rollback: (use an old local version again)", bold=True)
+                print("    * run the installer for an already existing UI version")
                 print("    * set the pyra-cli to point to the new version")
-                print(
-                    "    * test if pyra-cli command is installed in environment path"
-                )
+                print("    * test if pyra-cli command is installed in environment path")
                 print("    * add desktop-shortcut to code directory")
-                print("remove: remove a locally installed version")
+                utils.pretty_print("remove: remove a locally installed version", bold=True)
+                # fmt: on
 
             elif command == "status":
                 commands.status.run()
