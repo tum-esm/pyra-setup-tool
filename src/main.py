@@ -65,7 +65,7 @@ def run() -> None:
             utils.print_line()
             command = utils.pretty_input(
                 "Enter a command",
-                ["help", "status", "install", "rollback", "remove", "exit"],
+                ["help", "status", "install", "install-prerelease", "rollback", "remove", "exit"],
             )
 
             if command == "help":
@@ -84,6 +84,7 @@ def run() -> None:
                 print("    * test if pyra-cli command is installed in environment path")
                 print("    * add desktop-shortcut to code directory")
                 print("    * migrate config from an older version")
+                utils.pretty_print("install-prerelease: same as install, but with prerelease versions", bold=True)
                 utils.pretty_print("rollback: (use an old local version again)", bold=True)
                 print("    * run the installer for an already existing UI version")
                 print("    * set the pyra-cli to point to the new version")
@@ -96,7 +97,10 @@ def run() -> None:
                 commands.status.run()
 
             elif command == "install":
-                commands.install.run()
+                commands.install.run(prerelease=False)
+            
+            elif command == "install-prerelease":
+                commands.install.run(prerelease=True)
 
             elif command == "rollback":
                 commands.rollback.run()

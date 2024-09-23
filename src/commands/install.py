@@ -1,7 +1,7 @@
 from src import Version, utils, tasks
 
 
-def run() -> None:
+def run(prerelease: bool = False) -> None:
     """Installs a new version of Pyra.
 
     This includes:
@@ -13,7 +13,7 @@ def run() -> None:
     """
 
     local_pyra_versions = tasks.find_versions.get_local_versions()
-    remote_pyra_versions = tasks.find_versions.get_remote_versions()
+    remote_pyra_versions = tasks.find_versions.get_remote_versions(prerelease=prerelease)
     if len(remote_pyra_versions) == 0:
         print("Did not find any remote pyra versions.")
         return

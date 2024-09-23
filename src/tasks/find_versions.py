@@ -22,7 +22,7 @@ def get_local_versions() -> list[Version]:
     return local_versions
 
 
-def get_remote_versions() -> list[Version]:
+def get_remote_versions(prerelease: bool = False) -> list[Version]:
     """Returns a list [Version("4.0.1"), Version("4.0.2"), ...] of Pyra
     versions available on GitHub. Only considers version that are not
     prereleases."""
@@ -37,7 +37,7 @@ def get_remote_versions() -> list[Version]:
     )
     return [
         Version(release["tag_name"])
-        for release in releases if not release["prerelease"]
+        for release in releases if (prerelease == release["prerelease"])
     ]
 
 
