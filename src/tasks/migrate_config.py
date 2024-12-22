@@ -93,6 +93,7 @@ def _migrate_a_single_config_object(
             Version("v4.1.1"): Version("v4.1.2"),
             Version("v4.1.2"): Version("v4.1.3"),
             Version("v4.1.3"): Version("v4.1.4"),
+            Version("v4.1.4"): Version("v4.2.0"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -190,7 +191,14 @@ def _migrate_a_single_config_object(
         
         if to_version == Version("v4.1.4"):
             pass
-
+        
+        if to_version == Version("v4.2.0"):
+            to_dict["opus"]["automatic_peak_positioning"] = False
+            to_dict["opus"]["interferogram_path"] = ""
+            to_dict["measurement_triggers"]["shutdown_grace_period"] = 300
+            to_dict["tum_enclosure"] = {**to_dict["tum_plc"]}
+            del to_dict["tum_plc"]
+        
         # add future migration rules here
 
     except Exception as e:
