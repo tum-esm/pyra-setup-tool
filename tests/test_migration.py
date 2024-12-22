@@ -2,35 +2,27 @@ import tum_esm_utils
 import deepdiff
 from src import Version, tasks
 
+ALL_VERSIONS = [
+    Version("4.0.5"),
+    Version("4.0.6"),
+    Version("4.0.7"),
+    Version("4.0.8"),
+    Version("4.1.0"),
+    Version("4.1.1"),
+    Version("4.1.2"),
+    Version("4.1.3"),
+    Version("4.1.4"),
+    Version("4.2.0"),
+]
 
 def test_migration() -> None:
-    for from_version in [
-        Version("4.0.5"),
-        Version("4.0.6"),
-        Version("4.0.7"),
-        Version("4.0.8"),
-        Version("4.1.0"),
-        Version("4.1.1"),
-        Version("4.1.2"),
-        Version("4.1.3"),
-        Version("4.1.4"),
-    ]:
+    for from_version in ALL_VERSIONS:
         src_config = tum_esm_utils.files.load_json_file(
             tum_esm_utils.files.rel_to_abs_path(
                 f"./configs/pyra-config-{from_version.tag[1:]}.json"
             )
         )
-        for to_version in [
-            Version("4.0.5"),
-            Version("4.0.6"),
-            Version("4.0.7"),
-            Version("4.0.8"),
-            Version("4.1.0"),
-            Version("4.1.1"),
-            Version("4.1.2"),
-            Version("4.1.3"),
-            Version("4.1.4"),
-        ]:
+        for to_version in ALL_VERSIONS:
             if to_version <= from_version:
                 continue
             print(f"Testing migration from {from_version} to {to_version}")
