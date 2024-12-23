@@ -196,8 +196,12 @@ def _migrate_a_single_config_object(
             to_dict["opus"]["automatic_peak_positioning"] = False
             to_dict["opus"]["interferogram_path"] = ""
             to_dict["measurement_triggers"]["shutdown_grace_period"] = 300
+            
             to_dict["tum_enclosure"] = {**to_dict["tum_plc"]}
             del to_dict["tum_plc"]
+            
+            to_dict["general"]["seconds_per_core_iteration"] = to_dict["general"]["seconds_per_core_interval"]
+            del to_dict["general"]["seconds_per_core_interval"]
         
         # add future migration rules here
 
