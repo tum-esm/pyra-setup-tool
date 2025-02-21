@@ -23,9 +23,7 @@ def run() -> None:
 
     try:
         utils.print_line()
-        utils.pretty_print(
-            "Welcome to the pyra-setup-tool! Instruction formatting: "
-        )
+        utils.pretty_print("Welcome to the pyra-setup-tool! Instruction formatting: ")
         utils.pretty_print("  * checkpoints = green ", color="green")
         utils.pretty_print("  * expecting user input = yellow ", color="yellow")
         utils.print_line()
@@ -33,13 +31,13 @@ def run() -> None:
         # The following check is necessary because I did not manage to de-
         # activate the current venv from within a subprocess/system call/etc.
         utils.pretty_print(
-            "Please DO NOT use a virtual environment for PYRA! Use the" +
-            " system interpreter available via the command 'python'. " +
-            f"Currently using the interpreter '{sys.executable}'"
+            "Please DO NOT use a virtual environment for PYRA! Use the"
+            + " system interpreter available via the command 'python'. "
+            + f"Currently using the interpreter '{sys.executable}'"
         )
         if not utils.pretty_input(
-            f"Run 'which python' in another shell. Are system-" +
-            "interpreter and the current one identical?",
+            f"Run 'which python' in another shell. Are system-"
+            + "interpreter and the current one identical?",
             ["Y", "n"],
         ).startswith("Y"):
             utils.pretty_print("Aborting", color="red")
@@ -98,7 +96,7 @@ def run() -> None:
 
             elif command == "install":
                 commands.install.run(prerelease=False)
-            
+
             elif command == "install-prerelease":
                 commands.install.run(prerelease=True)
 

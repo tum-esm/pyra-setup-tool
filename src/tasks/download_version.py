@@ -10,17 +10,17 @@ def download_version(version: Version) -> None:
 
     # download codebase tarball and extract code
     utils.shell_utils.run_shell_command(
-        f"curl -L https://github.com/tum-esm/pyra/archive/refs/tags/" +
-        f"{version.as_tag()}.tar.gz --output {version.as_tag()}.tar.gz " +
-        f"&& tar -xzf {version.as_tag()}.tar.gz",
+        f"curl -L https://github.com/tum-esm/pyra/archive/refs/tags/"
+        + f"{version.as_tag()}.tar.gz --output {version.as_tag()}.tar.gz "
+        + f"&& tar -xzf {version.as_tag()}.tar.gz",
         cwd=pyra_dir,
     )
     utils.shell_utils.pretty_print("Downloaded code", color="green")
 
     # download ui installer
     utils.shell_utils.run_shell_command(
-        f'curl -L -O "https://github.com/tum-esm/pyra/releases/download' +
-        f'/{version.as_tag()}/Pyra.UI_{version.as_str()}_x64_en-US.msi"',
+        f'curl -L -O "https://github.com/tum-esm/pyra/releases/download'
+        + f'/{version.as_tag()}/Pyra.UI_{version.as_str()}_x64_en-US.msi"',
         cwd=os.path.join(pyra_dir, "ui-installers"),
     )
     utils.shell_utils.pretty_print("Downloaded UI", color="green")

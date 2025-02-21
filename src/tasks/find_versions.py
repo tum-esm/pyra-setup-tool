@@ -15,7 +15,7 @@ def get_local_versions() -> list[Version]:
         try:
             assert d.startswith("pyra-")
             assert os.path.isdir(os.path.join(pyra_directory, d))
-            local_versions.append(Version(d[5 :]))
+            local_versions.append(Version(d[5:]))
         except AssertionError:
             pass
 
@@ -29,24 +29,23 @@ def get_remote_versions(prerelease: bool = False) -> list[Version]:
 
     releases: list[Any] = json.loads(
         utils.run_shell_command(
-            f"curl --request GET " +
-            f'--url "https://api.github.com/repos/tum-esm/pyra/releases" ' +
-            f'--header "Accept: application/vnd.github+json" ' +
-            f'--header "X-GitHub-Api-Version: 2022-11-28"'
+            f"curl --request GET "
+            + f'--url "https://api.github.com/repos/tum-esm/pyra/releases" '
+            + f'--header "Accept: application/vnd.github+json" '
+            + f'--header "X-GitHub-Api-Version: 2022-11-28"'
         )
     )
     return [
         Version(release["tag_name"])
-        for release in releases if (
-            (prerelease == release["prerelease"]) and
-            (release["tag_name"] not in ["v4.0.0", "v4.0.1", "v4.0.2", "v4.0.3", "v4.0.4"])
+        for release in releases
+        if (
+            (prerelease == release["prerelease"])
+            and (release["tag_name"] not in ["v4.0.0", "v4.0.1", "v4.0.2", "v4.0.3", "v4.0.4"])
         )
     ]
 
 
-def get_versions_to_migrate_from(
-    migration_target_version: Version
-) -> list[Version]:
+def get_versions_to_migrate_from(migration_target_version: Version) -> list[Version]:
     """Returns a list [Version("4.0.1"), Version("4.0.2"), ...] of Pyra
     versions that can be used to migrate the config.json to the given
     migration_target_version."""
@@ -54,21 +53,19 @@ def get_versions_to_migrate_from(
     local_pyra_versions = get_local_versions()
     documents_dir = utils.get_documents_dir()
     return [
-        v for v in local_pyra_versions if (
-            v < migration_target_version and os.path.isfile(
-                os.path.join(
-                    documents_dir, "pyra", f"pyra-{v.as_str()}", "config",
-                    "config.json"
-                )
+        v
+        for v in local_pyra_versions
+        if (
+            v < migration_target_version
+            and os.path.isfile(
+                os.path.join(documents_dir, "pyra", f"pyra-{v.as_str()}", "config", "config.json")
             )
         )
     ]
 
 
 def get_version_used_in_cli() -> Optional[Version]:
-    pyra_cli_bat = os.path.join(
-        utils.get_documents_dir(), "pyra", "pyra-cli.bat"
-    )
+    pyra_cli_bat = os.path.join(utils.get_documents_dir(), "pyra", "pyra-cli.bat")
 
     if not os.path.isfile(pyra_cli_bat):
         return None
@@ -85,4 +82,4 @@ def get_version_used_in_cli() -> Optional[Version]:
     if len(matches) != 1:
         return None
 
-    return Version(matches[0].group()[10 :-24])
+    return Version(matches[0].group()[10:-24])

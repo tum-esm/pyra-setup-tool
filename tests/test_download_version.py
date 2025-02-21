@@ -16,9 +16,9 @@ def test_download_version(clear_local_pyra_dir: None) -> None:
         )
 
         assert not os.path.isdir(code_dir), f'directory "{code_dir}" should not exist'
-        assert not os.path.isfile(
-            ui_installers_file
-        ), f'file "{ui_installers_file}" should not exist'
+        assert not os.path.isfile(ui_installers_file), (
+            f'file "{ui_installers_file}" should not exist'
+        )
         assert v not in tasks.find_versions.get_local_versions()
 
         tasks.download_version.download_version(v)

@@ -37,9 +37,9 @@ def run_shell_command(
         stdout = "null"
         stderr = "null"
 
-    assert (
-        p.returncode == 0
-    ), f"command '{command}' failed with exit code {p.returncode}: stderr = '{stderr}'"
+    assert p.returncode == 0, (
+        f"command '{command}' failed with exit code {p.returncode}: stderr = '{stderr}'"
+    )
     return stdout.strip()
 
 
@@ -49,9 +49,7 @@ def pretty_print(
     bold: bool = False,
     end: str = "\n",
 ) -> None:
-    color_sequences = {
-        "red": Fore.RED, "green": Fore.GREEN, "yellow": Fore.YELLOW
-    }
+    color_sequences = {"red": Fore.RED, "green": Fore.GREEN, "yellow": Fore.YELLOW}
     if color is not None:
         text = color_sequences[color] + text + Style.RESET_ALL
     if bold:

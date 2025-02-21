@@ -15,6 +15,7 @@ ALL_VERSIONS = [
     Version("4.2.0"),
 ]
 
+
 def test_migration() -> None:
     for from_version in ALL_VERSIONS:
         src_config = tum_esm_utils.files.load_json_file(
@@ -41,6 +42,4 @@ def test_migration() -> None:
                 ignore_numeric_type_changes=True,
             )
             print(f"difference = {difference.to_json(indent=4)}")
-            assert len(
-                difference
-            ) == 0, f"Migration from {from_version} to {to_version} failed."
+            assert len(difference) == 0, f"Migration from {from_version} to {to_version} failed."

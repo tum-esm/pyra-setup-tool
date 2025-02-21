@@ -24,9 +24,9 @@ def get_documents_dir() -> str:
     else:
         raise Exception(f"Unknown platform '{sys.platform}'")
 
-    assert os.path.isdir(
-        documents_directory
-    ), f"Documents directory does not exist. ({documents_directory})"
+    assert os.path.isdir(documents_directory), (
+        f"Documents directory does not exist. ({documents_directory})"
+    )
 
     return documents_directory
 
@@ -41,9 +41,9 @@ def get_desktop_dir() -> str:
     else:
         raise Exception(f"Unknown platform '{sys.platform}'")
 
-    assert os.path.isdir(
-        desktop_directory
-    ), f"Desktop directory does not exist. ({desktop_directory})"
+    assert os.path.isdir(desktop_directory), (
+        f"Desktop directory does not exist. ({desktop_directory})"
+    )
 
     return desktop_directory
 
@@ -68,9 +68,7 @@ def initialize_pyra_directories() -> str:
     docs_directory = get_documents_dir()
 
     pyra_directory = os.path.join(docs_directory, "pyra")
-    ui_installers_directory = os.path.join(
-        docs_directory, "pyra", "ui-installers"
-    )
+    ui_installers_directory = os.path.join(docs_directory, "pyra", "ui-installers")
     if not os.path.isdir(pyra_directory):
         os.mkdir(pyra_directory)
         print(f"Created directory '{pyra_directory}'")

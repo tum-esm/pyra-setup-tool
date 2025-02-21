@@ -6,13 +6,11 @@ def check_python_version() -> None:
     """Checks if the Python version is 3.10.x."""
 
     python_version = sys.version.split(" ")[0]
-    assert python_version.startswith(
-        "3.10."
-    ), f"Please use Python 3.10.x (currently at {python_version})"
-
-    utils.pretty_print(
-        f"Python version {python_version} is supported", color="green"
+    assert python_version.startswith("3.10."), (
+        f"Please use Python 3.10.x (currently at {python_version})"
     )
+
+    utils.pretty_print(f"Python version {python_version} is supported", color="green")
 
 
 def check_command_availability(command: str) -> None:

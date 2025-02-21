@@ -29,9 +29,7 @@ def run(prerelease: bool = False) -> None:
         return
 
     if version_to_be_installed not in remote_pyra_versions:
-        utils.shell_utils.pretty_print(
-            f'Invalid version "{version_to_be_installed.as_str()}"'
-        )
+        utils.shell_utils.pretty_print(f'Invalid version "{version_to_be_installed.as_str()}"')
         return
 
     if version_to_be_installed in local_pyra_versions:
@@ -47,8 +45,6 @@ def run(prerelease: bool = False) -> None:
     available_versions_to_migrate_from = tasks.find_versions.get_versions_to_migrate_from(
         version_to_be_installed
     )
-    tasks.migrate_config.migrate_config(
-        available_versions_to_migrate_from, version_to_be_installed
-    )
+    tasks.migrate_config.migrate_config(available_versions_to_migrate_from, version_to_be_installed)
 
     utils.shell_utils.pretty_print("done!", color="green")

@@ -37,25 +37,17 @@ def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
 
     code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
     if version <= Version("4.1.2"):
-        requirements_src_path = os.path.join(
-            REQUIREMENTS_DIR, f"{version.as_str()}.txt"
-        )
+        requirements_src_path = os.path.join(REQUIREMENTS_DIR, f"{version.as_str()}.txt")
         requirements_dst_path = os.path.join(code_dir, "requirements.txt")
         if not os.path.isfile(requirements_dst_path):
-            assert os.path.isfile(
-                requirements_src_path
-            ), f"File not found: {requirements_src_path}"
+            assert os.path.isfile(requirements_src_path), f"File not found: {requirements_src_path}"
             shutil.copyfile(requirements_src_path, requirements_dst_path)
 
-        utils.run_shell_command(
-            "pip install -r requirements.txt", cwd=code_dir, silent=False
-        )
+        utils.run_shell_command("pip install -r requirements.txt", cwd=code_dir, silent=False)
     else:
         utils.run_shell_command("pip install .", cwd=code_dir, silent=False)
         utils.run_shell_command(
-            "pip uninstall polars polars-lts-cpu --yes",
-            cwd=code_dir,
-            silent=False
+            "pip uninstall polars polars-lts-cpu --yes", cwd=code_dir, silent=False
         )
     utils.pretty_print("Installed code dependencies", color="green")
 
@@ -64,10 +56,7 @@ def _run_ui_installer(pyra_dir: str, version: Version) -> None:
     """Runs the UI installer (`.msi`) which opens another window the user
     has to click through."""
 
-    utils.pretty_print(
-        "Please install the UI using the installer that opens now",
-        color="yellow"
-    )
+    utils.pretty_print("Please install the UI using the installer that opens now", color="yellow")
     ui_installer_path = os.path.join(
         pyra_dir, "ui-installers", f"Pyra.UI_{version.as_str()}_x64_en-US.msi"
     )
@@ -99,8 +88,7 @@ def _add_pyra_cli_to_env_path(pyra_dir: str) -> None:
 
     if utils.pyra_dir_is_in_env_path():
         utils.pretty_print(
-            '"pyra-cli" command already in user environment variables',
-            color="green"
+            '"pyra-cli" command already in user environment variables', color="green"
         )
     else:
         utils.pretty_input(
@@ -118,22 +106,14 @@ def _add_pyra_dir_desktop_shortcut(pyra_dir: str, version: Version) -> None:
 
     # Remove all old directory shortcuts
     p = re.compile(r"^open-pyra-\d+\.\d+\.\d+-directory\.bat$")
-    old_shortcuts = [
-        s for s in os.listdir(desktop_dir) if p.match(s) is not None
-    ]
+    old_shortcuts = [s for s in os.listdir(desktop_dir) if p.match(s) is not None]
     for s in old_shortcuts:
         os.remove(os.path.join(desktop_dir, s))
 
     # Create new shortcut for pyra-x.y.z directory. I used a ".bat"
     # script for this instead of a "windows shortcut" because the
     # latter are too much effort to create or require a python library
-    with open(
-        os.path.join(
-            desktop_dir, f"open-pyra-{version.as_str()}-directory.bat"
-        ), "w"
-    ) as f:
+    with open(os.path.join(desktop_dir, f"open-pyra-{version.as_str()}-directory.bat"), "w") as f:
         f.write(f"@ECHO OFF\nstart {code_dir}")
 
-    utils.pretty_print(
-        "Created desktop shortcut to code directory", color="green"
-    )
+    utils.pretty_print("Created desktop shortcut to code directory", color="green")
