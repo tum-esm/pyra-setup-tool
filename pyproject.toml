@@ -16,6 +16,7 @@ dev = [
     "yapf>=0.40.2",
     "deepdiff>=6.7.1",
     "tum-esm-utils>=1.8.0",
+    "ruff>=0.9.7",
 ]
 
 [tool.pdm]
@@ -28,12 +29,12 @@ packages = []
 strict = true
 implicit_reexport = true
 
-[tool.yapf]
-based_on_style = "facebook"
-coalesce_brackets = true
-split_before_dict_set_generator = true
-each_dict_entry_on_separate_line = false
-spaces_around_subscript_colon = true
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+ignore = ["E402", "E741"]
+exclude = ["tests/*"]
 
 [[tool.mypy.overrides]]
 module = ["colorama.*", "deepdiff"]
