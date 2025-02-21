@@ -40,7 +40,7 @@ def run_shell_command(
     assert p.returncode == 0, (
         f"command '{command}' failed with exit code {p.returncode}: stderr = '{stderr}'"
     )
-    return stdout.strip()
+    return stdout.strip("\n\t ")
 
 
 def pretty_print(

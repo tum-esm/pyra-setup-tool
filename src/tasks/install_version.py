@@ -25,14 +25,35 @@ def install_version(version: Version) -> None:
 
     pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
 
-    _install_python_dependencies(pyra_dir, version)
+    _uninstall_current_python_dependencies(pyra_dir, version)
+    _install_new_python_dependencies(pyra_dir, version)
     _run_ui_installer(pyra_dir, version)
     _update_pyra_cli_pointer(pyra_dir, version)
     _add_pyra_cli_to_env_path(pyra_dir)
     _add_pyra_dir_desktop_shortcut(pyra_dir, version)
 
 
-def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
+def _uninstall_current_python_dependencies(pyra_dir: str, version: Version) -> None:
+    """install system dependencies with pip"""
+
+    code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
+    out = utils.run_shell_command("pip freeze", cwd=code_dir, silent=True)
+    installed_packages: list[str] = []
+    for line in out.split("\n"):
+        if "==" in line:
+            package_name = line.split("==")[0]
+            installed_packages.append(package_name)
+        elif " @ " in line:
+            package_name = line.split(" @ ")[0]
+            installed_packages.append(package_name)
+    if "pip" in installed_packages:
+        installed_packages.remove("pip")
+    utils.run_shell_command(
+        f"pip uninstall -y {' '.join(installed_packages)}", cwd=code_dir, silent=False
+    )
+
+
+def _install_new_python_dependencies(pyra_dir: str, version: Version) -> None:
     """install system dependencies with pip"""
 
     code_dir = os.path.join(pyra_dir, f"pyra-{version.as_str()}")
@@ -45,9 +66,6 @@ def _install_python_dependencies(pyra_dir: str, version: Version) -> None:
 
         utils.run_shell_command("pip install -r requirements.txt", cwd=code_dir, silent=False)
     else:
-        utils.run_shell_command(
-            "pip uninstall poetry polars polars-lts-cpu --yes", cwd=code_dir, silent=False
-        )
         utils.run_shell_command("pip install .", cwd=code_dir, silent=False)
     utils.pretty_print("Installed code dependencies", color="green")
 
