@@ -42,15 +42,15 @@ def _migrate_config_files(from_version: Version, to_version: Version) -> None:
             f"Migrated config from {from_version.as_str()} to {to_version.as_str()}",
             color="green",
         )
+
+        with open(dst_path, "w") as f:
+            json.dump(new_config, f)
     except Exception as e:
         utils.pretty_print(
             f'Could not migrate config. The config of version "{from_version.as_str()}" '
             + f"might be invalid: {e}",
             color="red",
         )
-
-    with open(dst_path, "w") as f:
-        json.dump(new_config, f)
 
 
 def migrate_config_object(
@@ -91,6 +91,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
         raise Exception(f'Unknown version "{from_version.as_str()}"')
 
     to_dict = json.loads(json.dumps(from_dict))
+    assert isinstance(to_dict, dict), f"config is not a dictionary, got {to_dict}"
 
     try:
         to_dict["general"]["version"] = to_version.as_str()
@@ -124,55 +125,59 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             del to_dict["error_email"]["sender_password"]
 
             # helios
-            to_dict["helios"]["min_seconds_between_state_changes"] = 180
-            to_dict["helios"]["edge_pixel_threshold"] = (
-                from_dict["helios"]["edge_detection_threshold"] * 100
-            )
-            del to_dict["helios"]["edge_detection_threshold"]
-            to_dict["helios"]["edge_color_threshold"] = 40
-            to_dict["helios"]["target_pixel_brightness"] = 50
-            to_dict["helios"]["save_images_to_archive"] = from_dict["helios"]["save_images"]
-            del to_dict["helios"]["save_images"]
-            to_dict["helios"]["save_current_image"] = False
+            if to_dict.get("helios", None) is not None:
+                to_dict["helios"]["min_seconds_between_state_changes"] = 180
+                to_dict["helios"]["edge_pixel_threshold"] = (
+                    from_dict["helios"]["edge_detection_threshold"] * 100
+                )
+                del to_dict["helios"]["edge_detection_threshold"]
+                to_dict["helios"]["edge_color_threshold"] = 40
+                to_dict["helios"]["target_pixel_brightness"] = 50
+                to_dict["helios"]["save_images_to_archive"] = from_dict["helios"]["save_images"]
+                del to_dict["helios"]["save_images"]
+                to_dict["helios"]["save_current_image"] = False
 
             # upload
-            del to_dict["upload"]["upload_ifgs"]
-            del to_dict["upload"]["src_directory_ifgs"]
-            del to_dict["upload"]["dst_directory_ifgs"]
-            del to_dict["upload"]["remove_src_ifgs_after_upload"]
-            del to_dict["upload"]["upload_helios"]
-            del to_dict["upload"]["dst_directory_helios"]
-            del to_dict["upload"]["remove_src_helios_after_upload"]
-            to_dict["upload"]["streams"] = [
-                {
-                    "is_active": from_dict["upload"]["upload_ifgs"],
-                    "label": "interferograms",
-                    "variant": "directories",
-                    "dated_regex": "^%Y%m%d$",
-                    "src_directory": from_dict["upload"]["src_directory_ifgs"],
-                    "dst_directory": from_dict["upload"]["dst_directory_ifgs"],
-                    "remove_src_after_upload": from_dict["upload"]["remove_src_ifgs_after_upload"],
-                },
-                {
-                    "is_active": False,
-                    "label": "datalogger",
-                    "variant": "files",
-                    "dated_regex": "^datalogger-%Y-%m-%d*$",
-                    "src_directory": "...",
-                    "dst_directory": "...",
-                    "remove_src_after_upload": False,
-                },
-            ]
+            if to_dict.get("upload", None) is not None:
+                del to_dict["upload"]["upload_ifgs"]
+                del to_dict["upload"]["src_directory_ifgs"]
+                del to_dict["upload"]["dst_directory_ifgs"]
+                del to_dict["upload"]["remove_src_ifgs_after_upload"]
+                del to_dict["upload"]["upload_helios"]
+                del to_dict["upload"]["dst_directory_helios"]
+                del to_dict["upload"]["remove_src_helios_after_upload"]
+                to_dict["upload"]["streams"] = [
+                    {
+                        "is_active": from_dict["upload"]["upload_ifgs"],
+                        "label": "interferograms",
+                        "variant": "directories",
+                        "dated_regex": "^%Y%m%d$",
+                        "src_directory": from_dict["upload"]["src_directory_ifgs"],
+                        "dst_directory": from_dict["upload"]["dst_directory_ifgs"],
+                        "remove_src_after_upload": from_dict["upload"][
+                            "remove_src_ifgs_after_upload"
+                        ],
+                    },
+                    {
+                        "is_active": False,
+                        "label": "datalogger",
+                        "variant": "files",
+                        "dated_regex": "^datalogger-%Y-%m-%d*$",
+                        "src_directory": "...",
+                        "dst_directory": "...",
+                        "remove_src_after_upload": False,
+                    },
+                ]
 
         if to_version == Version("v4.1.1"):
-            if "upload" in to_dict.keys():
+            if to_dict.get("upload", None) is not None:
                 to_dict["upload"]["only_upload_at_night"] = True
 
         if to_version == Version("v4.1.2"):
             pass
 
         if to_version == Version("v4.1.3"):
-            if "upload" in to_dict.keys():
+            if to_dict.get("upload", None) is not None:
                 to_dict["upload"]["only_upload_when_not_measuring"] = True
 
         if to_version == Version("v4.1.4"):
@@ -183,7 +188,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             to_dict["opus"]["interferogram_path"] = ""
             to_dict["measurement_triggers"]["shutdown_grace_period"] = 300
 
-            to_dict["tum_enclosure"] = {**to_dict["tum_plc"]}
+            to_dict["tum_enclosure"] = json.loads(json.dumps(to_dict["tum_plc"]))
             del to_dict["tum_plc"]
 
             to_dict["general"]["seconds_per_core_iteration"] = to_dict["general"][
