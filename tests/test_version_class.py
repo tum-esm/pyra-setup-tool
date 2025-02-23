@@ -1,6 +1,8 @@
+import pytest
 from src import Version
 
 
+@pytest.mark.order(2)
 def test_version_class() -> None:
     v = Version("1.2.3")
     assert v.major == 1

@@ -1,4 +1,5 @@
 import os
+import pytest
 import tum_esm_utils
 
 PROJECT_DIR = tum_esm_utils.files.get_parent_dir_path(__file__, current_depth=2)
@@ -8,6 +9,7 @@ def _rm(path: str) -> None:
     os.system(f"rm -rf {os.path.join(PROJECT_DIR, path)}")
 
 
+@pytest.mark.order(1)
 def test_static_types() -> None:
     _rm(".mypy_cache/3.10/src")
     _rm(".mypy_cache/3.10/tests")

@@ -1,8 +1,11 @@
 import os
+
+import pytest
 from src import utils, tasks
 from .fixtures import clear_local_pyra_dir
 
 
+@pytest.mark.order(4)
 def test_download_version(clear_local_pyra_dir: None) -> None:
     pyra_dir = os.path.join(utils.get_documents_dir(), "pyra")
     utils.initialize_pyra_directories()

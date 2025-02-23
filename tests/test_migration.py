@@ -1,3 +1,4 @@
+import pytest
 import tum_esm_utils
 import deepdiff
 from src import Version, tasks
@@ -16,6 +17,7 @@ ALL_VERSIONS = [
 ]
 
 
+@pytest.mark.order(2)
 def test_migration() -> None:
     for variant in ["-minimal", "-full"]:
         for from_version in ALL_VERSIONS:
