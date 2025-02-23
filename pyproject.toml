@@ -40,3 +40,6 @@ exclude = ["tests/*"]
 [[tool.mypy.overrides]]
 module = ["colorama.*", "deepdiff"]
 ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+addopts = "--exitfirst --verbose --durations=0 --no-header"
