@@ -86,6 +86,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             Version("v4.1.2"): Version("v4.1.3"),
             Version("v4.1.3"): Version("v4.1.4"),
             Version("v4.1.4"): Version("v4.2.0"),
+            Version("v4.2.0"): Version("v4.2.1"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -195,6 +196,16 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
                 "seconds_per_core_interval"
             ]
             del to_dict["general"]["seconds_per_core_interval"]
+
+        if to_version == Version("v4.2.1"):
+            if to_dict["general"]["min_sun_elevation"] == 11:
+                to_dict["general"]["min_sun_elevation"] = 5
+            to_dict["opus"]["automatic_peak_positioning_dcmin"] = 0.02
+            to_dict["camtracker"]["working_directory_path"] = "\\".join(
+                str(to_dict["camtracker"]["executable_path"]).replace("/", "\\").split("\\")[:-1]
+            )
+            if to_dict["upload"] != None:
+                to_dict["upload"]["is_active"] = True
 
         # add future migration rules here
 
