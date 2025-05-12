@@ -58,48 +58,7 @@
     "min_sun_elevation": 0,
     "shutdown_grace_period": 300
   },
-  "tum_enclosure": {
-    "ip": "10.0.0.4",
-    "version": 1,
-    "controlled_by_user": false
-  },
-  "helios": {
-    "camera_id": 0,
-    "evaluation_size": 15,
-    "seconds_per_interval": 6,
-    "min_seconds_between_state_changes": 180,
-    "edge_pixel_threshold": 1,
-    "edge_color_threshold": 40,
-    "target_pixel_brightness": 50,
-    "save_images_to_archive": false,
-    "save_current_image": false
-  },
-  "upload": {
-    "host": "1.2.3.4",
-    "user": "...",
-    "password": "...",
-    "is_active": true,
-    "only_upload_at_night": true,
-    "only_upload_when_not_measuring": true,
-    "streams": [
-      {
-        "is_active": false,
-        "label": "interferograms",
-        "variant": "directories",
-        "dated_regex": "^%Y%m%d$",
-        "src_directory": "...",
-        "dst_directory": "...",
-        "remove_src_after_upload": false
-      },
-      {
-        "is_active": false,
-        "label": "datalogger",
-        "variant": "files",
-        "dated_regex": "^datalogger-%Y-%m-%d*$",
-        "src_directory": "...",
-        "dst_directory": "...",
-        "remove_src_after_upload": false
-      }
-    ]
-  }
+  "tum_enclosure": null,
+  "helios": null,
+  "upload": null
 }
