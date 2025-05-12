@@ -204,7 +204,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             to_dict["camtracker"]["working_directory_path"] = "\\".join(
                 str(to_dict["camtracker"]["executable_path"]).replace("/", "\\").split("\\")[:-1]
             )
-            if to_dict["upload"] != None:
+            if to_dict["upload"] is not None:
                 to_dict["upload"]["is_active"] = True
 
         # add future migration rules here
