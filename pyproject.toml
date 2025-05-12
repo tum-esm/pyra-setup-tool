@@ -1,6 +1,6 @@
 [project]
 name = "pyra-setup-tool"
-version = "4.2.1"
+version = "4.2.2"
 description = "manage your Pyra installations"
 authors = [
     { name = "Moritz Makowski", email = "moritz.makowski@tum.de" },
