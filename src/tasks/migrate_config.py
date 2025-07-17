@@ -88,6 +88,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             Version("v4.1.4"): Version("v4.2.0"),
             Version("v4.2.0"): Version("v4.2.1"),
             Version("v4.2.1"): Version("v4.2.2"),
+            Version("v4.2.2"): Version("v4.2.3"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -209,6 +210,9 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
                 to_dict["upload"]["is_active"] = True
 
         if to_version == Version("v4.2.2"):
+            pass
+
+        if to_version == Version("v4.2.3"):
             pass
 
         # add future migration rules here
