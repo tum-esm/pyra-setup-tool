@@ -1,4 +1,5 @@
 import os
+import sys
 import pytest
 import tum_esm_utils
 
@@ -10,10 +11,16 @@ def _rm(path: str) -> None:
 
 
 @pytest.mark.order(1)
-def test_static_types() -> None:
+def test_with_mypy() -> None:
     _rm(".mypy_cache/3.10/src")
     _rm(".mypy_cache/3.10/tests")
     _rm(".mypy_cache/3.10/run.*")
 
     for path in ["run.py", "src/", "tests/"]:
-        assert os.system(f"cd {PROJECT_DIR} && python -m mypy {path}") == 0
+        assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m mypy {path}") == 0
+
+
+@pytest.mark.order(1)
+def test_with_pyright() -> None:
+    os.environ["TUM_ESM_UTILS_EXPLICIT_IMPORTS"] = "1"
+    assert os.system(f"cd {PROJECT_DIR} && {sys.executable} -m pyright") == 0
