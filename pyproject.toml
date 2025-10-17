@@ -1,9 +1,13 @@
 [project]
 name = "pyra-setup-tool"
-version = "4.2.4"
+version = "4.2.5"
 description = "manage your Pyra installations"
-authors = [{ name = "Moritz Makowski", email = "moritz.makowski@tum.de" }]
-dependencies = ["colorama==0.4.6"]
+authors = [
+    { name = "Moritz Makowski", email = "moritz.makowski@tum.de" },
+]
+dependencies = [
+    "colorama==0.4.6",
+]
 requires-python = "==3.10.*"
 readme = "README.md"
 license = { text = "GPL-3" }
@@ -38,7 +42,10 @@ ignore = ["E402", "E741"]
 exclude = ["tests/*"]
 
 [[tool.mypy.overrides]]
-module = ["colorama.*", "deepdiff"]
+module = [
+    "colorama.*",
+    "deepdiff",
+]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

@@ -90,6 +90,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             Version("v4.2.1"): Version("v4.2.2"),
             Version("v4.2.2"): Version("v4.2.3"),
             Version("v4.2.3"): Version("v4.2.4"),
+            Version("v4.2.4"): Version("v4.2.5"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -220,6 +221,9 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             if to_dict["helios"] is not None:
                 to_dict["helios"]["camera_brightness"] = 64
                 to_dict["helios"]["camera_contrast"] = 64
+        
+        if to_version == Version("v4.2.5"):
+            pass
 
         # add future migration rules here
 
