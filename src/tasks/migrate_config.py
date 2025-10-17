@@ -95,7 +95,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
 
-    to_dict = json.loads(json.dumps(from_dict))
+    to_dict: dict[Any, Any] = json.loads(json.dumps(from_dict))
     assert isinstance(to_dict, dict), f"config is not a dictionary, got {to_dict}"
 
     try:
@@ -221,7 +221,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             if to_dict["helios"] is not None:
                 to_dict["helios"]["camera_brightness"] = 64
                 to_dict["helios"]["camera_contrast"] = 64
-        
+
         if to_version == Version("v4.2.5"):
             pass
 

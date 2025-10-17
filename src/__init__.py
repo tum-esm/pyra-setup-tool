@@ -72,4 +72,7 @@ class Version:
         return self.major * 1_000_000 + self.minor * 1_000 + self.patch
 
 
-from . import utils, tasks, commands, main
+from . import utils as utils
+from . import tasks as tasks
+from . import commands as commands
+from . import main as main

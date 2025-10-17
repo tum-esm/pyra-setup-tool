@@ -1,6 +1,6 @@
 import pytest
 import tum_esm_utils
-import deepdiff
+import deepdiff  # pyright: ignore[reportMissingTypeStubs]
 from src import Version, tasks
 
 ALL_VERSIONS = [
@@ -43,7 +43,7 @@ def test_migration() -> None:
                 migrated_src_config = tasks.migrate_config.migrate_config_object(
                     src_config, from_version, to_version
                 )
-                difference = deepdiff.DeepDiff(
+                difference = deepdiff.DeepDiff(  # pyright: ignore[reportPrivateImportUsage]
                     migrated_src_config,
                     dst_config,
                     ignore_order=True,

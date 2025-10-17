@@ -1,8 +1,6 @@
-import os
-
 import pytest
 from src import utils, tasks, Version
-from .fixtures import clear_local_pyra_dir
+from .fixtures import clear_local_pyra_dir  # pyright: ignore[reportUnusedImport]
 
 
 @pytest.mark.order(3)
