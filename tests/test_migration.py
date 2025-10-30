@@ -19,6 +19,7 @@ ALL_VERSIONS = [
     Version("4.2.3"),
     Version("4.2.4"),
     Version("4.2.5"),
+    Version("4.2.6"),
 ]
 
 
