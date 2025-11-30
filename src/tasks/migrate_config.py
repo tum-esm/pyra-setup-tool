@@ -92,6 +92,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             Version("v4.2.3"): Version("v4.2.4"),
             Version("v4.2.4"): Version("v4.2.5"),
             Version("v4.2.5"): Version("v4.2.6"),
+            Version("v4.2.6"): Version("v4.2.7"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -227,6 +228,9 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             pass
 
         if to_version == Version("v4.2.6"):
+            pass
+
+        if to_version == Version("v4.2.7"):
             pass
 
         # add future migration rules here
