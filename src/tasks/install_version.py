@@ -76,7 +76,7 @@ def _run_ui_installer(pyra_dir: str, version: Version) -> None:
 
     utils.pretty_print("Please install the UI using the installer that opens now", color="yellow")
     ui_installer_path = os.path.join(
-        pyra_dir, "ui-installers", f"Pyra.UI_{version.as_str()}_x64_en-US.msi"
+        pyra_dir, "ui-installers", f"Pyra.UI_{version.as_msi_artifact_str()}_x64_en-US.msi"
     )
     try:
         utils.run_shell_command(f"msiexec /i {ui_installer_path} /qf")

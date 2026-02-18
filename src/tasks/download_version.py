@@ -20,7 +20,7 @@ def download_version(version: Version) -> None:
     # download ui installer
     utils.shell_utils.run_shell_command(
         f'curl -L -O "https://github.com/tum-esm/pyra/releases/download'
-        + f'/{version.as_tag()}/Pyra.UI_{version.as_str()}_x64_en-US.msi"',
+        + f'/{version.as_tag()}/Pyra.UI_{version.as_msi_artifact_str()}_x64_en-US.msi"',
         cwd=os.path.join(pyra_dir, "ui-installers"),
     )
     utils.shell_utils.pretty_print("Downloaded UI", color="green")
