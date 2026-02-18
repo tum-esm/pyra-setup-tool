@@ -28,17 +28,27 @@ class Version:
 
     def as_str(self) -> str:
         """Returns the version as a string, e.g. `1.2.3`"""
-        return f"{self.major}.{self.minor}.{self.patch}"
+        s = f"{self.major}.{self.minor}.{self.patch}"
+        if self.prerelease is not None:
+            s += f"-{self.prerelease}"
+        return s
+
+    def as_msi_artifact_str(self) -> str:
+        """Returns the version as a string, e.g. `1.2.3`"""
+        return self.as_str().replace("alpha.", "").replace("beta.", "")
 
     def __str__(self) -> str:
         return self.as_str()
 
     def as_tag(self) -> str:
         """Returns the version as a tag, e.g. `v1.2.3`"""
-        return f"v{self.major}.{self.minor}.{self.patch}"
+        t = f"v{self.major}.{self.minor}.{self.patch}"
+        if self.prerelease is not None:
+            t += f"-{self.prerelease}"
+        return t
 
     def as_ui_installer_name(self) -> str:
-        return f"Pyra.UI_{self.as_str()}_x64_en-US.msi"
+        return f"Pyra.UI_{self.as_msi_artifact_str()}_x64_en-US.msi"
 
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, Version)
