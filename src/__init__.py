@@ -1,5 +1,6 @@
 from __future__ import annotations
 import re
+from typing import Optional
 
 
 class Version:
@@ -7,12 +8,15 @@ class Version:
         """The name can be either a tag, e.g. `v1.2.3`, or a version, e.g. `1.2.3`"""
         tag = name if name.startswith("v") else f"v{name}"
 
-        tag_pattern = re.compile(r"^v\d+\.\d+\.\d+$")
+        tag_pattern = re.compile(r"^v\d+\.\d+\.\d+(\-(alpha|beta)\.\d+)?$")
         assert tag_pattern.match(tag), f"Invalid name: {tag}"
         self.tag = tag
         self.major = int(tag[1:].split(".")[0])
         self.minor = int(tag[1:].split(".")[1])
-        self.patch = int(tag[1:].split(".")[2])
+        self.patch = int(tag[1:].split(".")[2].split("-")[0])
+        self.prerelease: Optional[str] = None
+        if "-" in tag:
+            self.prerelease = tag.split("-")[1]
 
         assert tag not in [
             "v4.0.0",
@@ -38,7 +42,12 @@ class Version:
 
     def __eq__(self, other: object) -> bool:
         assert isinstance(other, Version)
-        return self.major == other.major and self.minor == other.minor and self.patch == other.patch
+        return (
+            self.major == other.major
+            and self.minor == other.minor
+            and self.patch == other.patch
+            and self.prerelease == other.prerelease
+        )
 
     def __lt__(self, other: object) -> bool:
         assert isinstance(other, Version)
@@ -48,7 +57,22 @@ class Version:
         if self.minor != other.minor:
             return self.minor < other.minor
 
-        return self.patch < other.patch
+        if self.patch != other.patch:
+            return self.patch < other.patch
+
+        if (self.prerelease is not None) and (other.prerelease is not None):
+            if self.prerelease.startswith("alpha") and other.prerelease.startswith("beta"):
+                return True
+            elif self.prerelease.startswith("beta") and other.prerelease.startswith("alpha"):
+                return False
+            else:
+                return int(self.prerelease.split(".")[1]) < int(other.prerelease.split(".")[1])
+        if (self.prerelease is None) and (other.prerelease is not None):
+            return False
+        if (self.prerelease is not None) and (other.prerelease is None):
+            return True
+
+        return False
 
     def __le__(self, other: object) -> bool:
         assert isinstance(other, Version)
@@ -69,7 +93,12 @@ class Version:
         return False
 
     def __hash__(self) -> int:
-        return self.major * 1_000_000 + self.minor * 1_000 + self.patch
+        h = self.major * 1_000_000_000_000 + self.minor * 1_000_000_000 + self.patch * 1_000_000
+        if self.prerelease is not None:
+            if self.prerelease.startswith("beta"):
+                h += int(self.prerelease.split(".")[1]) * 1_000
+            h += int(self.prerelease.split(".")[1])
+        return h
 
 
 from . import utils as utils
