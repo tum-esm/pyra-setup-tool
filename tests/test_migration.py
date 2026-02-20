@@ -22,6 +22,7 @@ ALL_VERSIONS = [
     Version("4.2.6"),
     Version("4.2.7"),
     Version("5.0.0-beta.1"),
+    Version("5.0.0-beta.2"),
 ]
 
 
@@ -46,8 +47,11 @@ def test_migration() -> None:
                 migrated_src_config = tasks.migrate_config.migrate_config_object(
                     src_config, from_version, to_version
                 )
-                if to_version == Version("v5.0.0-beta.1"):
+                if (from_version < Version("v5.0.0-beta.1")) and (
+                    to_version >= Version("v5.0.0-beta.1")
+                ):
                     dst_config["aemet_enclosure"] = None
+
                 difference = deepdiff.DeepDiff(  # pyright: ignore[reportPrivateImportUsage]
                     migrated_src_config,
                     dst_config,

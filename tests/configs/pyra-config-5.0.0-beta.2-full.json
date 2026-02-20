@@ -1,0 +1,119 @@
+{
+  "general": {
+    "version": "5.0.0-beta.2",
+    "seconds_per_core_iteration": 30,
+    "test_mode": false,
+    "station_id": "...",
+    "min_sun_elevation": 5
+  },
+  "opus": {
+    "em27_ip": "10.10.0.1",
+    "executable_path": "C:\\Program Files (x86)\\Bruker\\OPUS_7.8.44\\opus.exe",
+    "experiment_path": "C:\\Users\\Public\\Documents\\Bruker\\OPUS_7.8.44\\XPM\\experiment.xpm",
+    "macro_path": "C:\\Users\\Public\\Documents\\Bruker\\OPUS_7.8.44\\Macro\\macro.mtx",
+    "username": "Default",
+    "password": "...",
+    "automatic_peak_positioning": false,
+    "automatic_peak_positioning_dcmin": 0.02,
+    "interferogram_path": ""
+  },
+  "camtracker": {
+    "config_path": "C:\\Users\\Public\\Documents\\Bruker\\camtracker_3_9_1_0\\CamTrackerConfig.txt",
+    "executable_path": "C:\\Users\\Public\\Documents\\Bruker\\camtracker_3_9_1_0\\CamTracker_3_9.exe",
+    "working_directory_path": "C:\\Users\\Public\\Documents\\Bruker\\camtracker_3_9_1_0",
+    "learn_az_elev_path": "C:\\Users\\Public\\Documents\\Bruker\\camtracker_3_9_1_0\\LEARN_Az_Elev.dat",
+    "sun_intensity_path": "C:\\Users\\Public\\Documents\\Bruker\\camtracker_3_9_1_0\\SunIntensity.dat",
+    "motor_offset_threshold": 10,
+    "restart_if_logs_are_too_old": false,
+    "restart_if_cover_remains_closed": false
+  },
+  "error_email": {
+    "smtp_host": "smtp.gmail.com",
+    "smtp_port": 587,
+    "smtp_username": "technical-user@domain.com",
+    "smtp_password": "...",
+    "sender_address": "technical-user@domain.com",
+    "notify_recipients": true,
+    "recipients": "your@mail.com"
+  },
+  "measurement_decision": {
+    "mode": "automatic",
+    "manual_decision_result": false,
+    "cli_decision_result": false
+  },
+  "measurement_triggers": {
+    "consider_time": true,
+    "consider_sun_elevation": true,
+    "consider_helios": false,
+    "start_time": {
+      "hour": 7,
+      "minute": 0,
+      "second": 0
+    },
+    "stop_time": {
+      "hour": 21,
+      "minute": 0,
+      "second": 0
+    },
+    "min_sun_elevation": 0,
+    "shutdown_grace_period": 300
+  },
+  "tum_enclosure": {
+    "ip": "10.0.0.4",
+    "version": 1,
+    "controlled_by_user": false
+  },
+  "aemet_enclosure": {
+    "datalogger_ip": "10.10.0.5",
+    "datalogger_port": 80,
+    "datalogger_username": "someone",
+    "datalogger_password": "withapassword",
+    "em27_power_plug_ip": "10.10.0.2",
+    "em27_power_plug_port": 80,
+    "em27_power_plug_username": "",
+    "em27_power_plug_password": "",
+    "use_em27_power_plug": false,
+    "controlled_by_user": false
+  },
+  "helios": {
+    "camera_id": 0,
+    "evaluation_size": 15,
+    "seconds_per_interval": 6,
+    "min_seconds_between_state_changes": 180,
+    "edge_pixel_threshold": 1,
+    "edge_color_threshold": 40,
+    "target_pixel_brightness": 50,
+    "camera_brightness": 64,
+    "camera_contrast": 64,
+    "save_images_to_archive": false,
+    "save_current_image": false
+  },
+  "upload": {
+    "host": "1.2.3.4",
+    "user": "...",
+    "password": "...",
+    "is_active": true,
+    "only_upload_at_night": true,
+    "only_upload_when_not_measuring": true,
+    "streams": [
+      {
+        "is_active": false,
+        "label": "interferograms",
+        "variant": "directories",
+        "dated_regex": "^%Y%m%d$",
+        "src_directory": "...",
+        "dst_directory": "...",
+        "remove_src_after_upload": false
+      },
+      {
+        "is_active": false,
+        "label": "datalogger",
+        "variant": "files",
+        "dated_regex": "^datalogger-%Y-%m-%d*$",
+        "src_directory": "...",
+        "dst_directory": "...",
+        "remove_src_after_upload": false
+      }
+    ]
+  }
+}
