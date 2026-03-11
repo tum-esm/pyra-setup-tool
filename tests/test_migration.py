@@ -23,6 +23,7 @@ ALL_VERSIONS = [
     Version("4.2.7"),
     Version("5.0.0-beta.1"),
     Version("5.0.0-beta.2"),
+    Version("5.0.0-beta.3"),
 ]
 
 

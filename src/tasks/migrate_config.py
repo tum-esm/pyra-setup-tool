@@ -95,6 +95,7 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             Version("v4.2.6"): Version("v4.2.7"),
             Version("v4.2.7"): Version("v5.0.0-beta.1"),
             Version("v5.0.0-beta.1"): Version("v5.0.0-beta.2"),
+            Version("v5.0.0-beta.2"): Version("v5.0.0-beta.3"),
         }[from_version]
     except KeyError:
         raise Exception(f'Unknown version "{from_version.as_str()}"')
@@ -239,6 +240,9 @@ def _migrate_a_single_config_object(from_dict: Any, from_version: Version) -> tu
             to_dict["aemet_enclosure"] = None
 
         if to_version == Version("v5.0.0-beta.2"):
+            pass
+
+        if to_version == Version("v5.0.0-beta.3"):
             pass
 
         # add future migration rules here
